@@ -682,6 +682,82 @@ function playSnare(velocity=0.7) {
   src.onended = () => releaseVoice(entry);
 }
 
+function playClap(velocity=0.7) {
+  const t = audioCtx.currentTime;
+  const vol = Math.min(1.1, velocity * 1.3);
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuf(0.09);
+  const hpf = audioCtx.createBiquadFilter();
+  hpf.type = 'highpass';
+  hpf.frequency.value = 2800;
+  const g = mkG(0.75 * vol);
+  noise.connect(hpf);
+  hpf.connect(g);
+  g.gain.setValueAtTime(0.7 * vol, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+  const entry = claimVoice(() => { try { noise.stop(); } catch(e){} });
+  noise.start(t);
+  noise.stop(t + 0.09);
+  noise.onended = () => releaseVoice(entry);
+}
+
+function playHat(velocity=0.65) {
+  const t = audioCtx.currentTime;
+  const vol = Math.min(1.0, velocity * 1.2);
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuf(0.06);
+  const hpf = audioCtx.createBiquadFilter();
+  hpf.type = 'highpass';
+  hpf.frequency.value = 8000;
+  const g = mkG(0.55 * vol);
+  noise.connect(hpf);
+  hpf.connect(g);
+  g.gain.setValueAtTime(0.52 * vol, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+  const entry = claimVoice(() => { try { noise.stop(); } catch(e){} });
+  noise.start(t);
+  noise.stop(t + 0.05);
+  noise.onended = () => releaseVoice(entry);
+}
+
+function playRide(velocity=0.8) {
+  const t = audioCtx.currentTime;
+  const vol = Math.min(1.1, velocity * 1.25);
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuf(0.16);
+  const hpf = audioCtx.createBiquadFilter();
+  hpf.type = 'highpass';
+  hpf.frequency.value = 5000;
+  const g = mkG(0.65 * vol);
+  noise.connect(hpf);
+  hpf.connect(g);
+  g.gain.setValueAtTime(0.65 * vol, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+  const entry = claimVoice(() => { try { noise.stop(); } catch(e){} });
+  noise.start(t);
+  noise.stop(t + 0.16);
+  noise.onended = () => releaseVoice(entry);
+}
+
+function playCrash(velocity=0.9) {
+  const t = audioCtx.currentTime;
+  const vol = Math.min(1.3, velocity * 1.35);
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuf(0.28);
+  const hpf = audioCtx.createBiquadFilter();
+  hpf.type = 'highpass';
+  hpf.frequency.value = 3800;
+  const g = mkG(0.75 * vol);
+  noise.connect(hpf);
+  hpf.connect(g);
+  g.gain.setValueAtTime(0.8 * vol, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+  const entry = claimVoice(() => { try { noise.stop(); } catch(e){} });
+  noise.start(t);
+  noise.stop(t + 0.28);
+  noise.onended = () => releaseVoice(entry);
+}
+
 function playTom(velocity=0.75, pitch='high') {
   const t = audioCtx.currentTime;
   const vol = Math.min(1.25, velocity * 1.6);
@@ -1274,8 +1350,12 @@ function fireDrumZone(zone, handLabel) {
   
   if (pad.type === 'kick') playKick(vel);
   else if (pad.type === 'snare') playSnare(vel);
+  else if (pad.type === 'clap') playClap(vel);
+  else if (pad.type === 'hat') playHat(vel);
   else if (pad.type === 'tom') playTom(vel, 'high');
   else if (pad.type === 'tom-mid') playTom(vel, 'mid');
+  else if (pad.type === 'ride') playRide(vel);
+  else if (pad.type === 'crash') playCrash(vel);
   
   onHit(pad.label, pad.id, vel);
   if (handLabel === 'right') glowR = 1;
@@ -1304,12 +1384,12 @@ function processGesture(hand, handLabel, zoneCount, fireFn, xRange) {
   const st = handState[handLabel];
   const currY = tip.y;
   const deltaY = st.prevY !== null ? (currY - st.prevY) : 0;
-  const velocity = Math.abs(deltaY) * 11;
-  const isDownward = deltaY > 0.007;
+  const velocity = Math.abs(deltaY) * 13;
+  const isDownward = deltaY > 0.004;
   
   st.velocity = velocity;
   
-  const inZone = tip.y > base.y + 0.009 && isDownward && velocity > gestureThreshold;
+  const inZone = tip.y > base.y + 0.006 && isDownward && velocity > gestureThreshold * 0.8;
   const mx = 1 - tip.x;
 
   let idx, inRange = true;
