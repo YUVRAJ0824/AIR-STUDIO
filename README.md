@@ -2,6 +2,8 @@ AIR//STUDIO
 
 NOTE: THIS IS A PERSONAL PROJECT MADE FOR FUN, EXPERIMENTATION, AND DEMO PURPOSES. IT IS NOT A COMMERCIAL PRODUCT.
 
+CURRENT BRANCH: EXP
+
 PROJECT OVERVIEW
 This project is a hand-tracking music interface built in the browser. It lets a user use their webcam and hand movements to trigger instrument sounds in real time. The concept is inspired by live electronic performance and experimental music tools.
 

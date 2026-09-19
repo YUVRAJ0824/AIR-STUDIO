@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIR//STUDIO UI GALLERY</title>
+  <style>
+    :root {
+      --bg: #090c12;
+      --panel: #121a22;
+      --panel-2: #1a2430;
+      --line: #2a3542;
+      --text: #edf3f9;
+      --muted: #a1afbf;
+      --yellow: #f5ff00;
+      --blue: #00c7ff;
+      --green: #48f2a5;
+      --red: #ff5c66;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 40px 20px;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 24px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 22px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 14px;
+    }
+    .shot {
+      height: 260px;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, #0b1017, #171f2a 45%, #0d1117);
+      position: relative;
+      overflow: hidden;
+    }
+    .shot.one::before,
+    .shot.two::before,
+    .shot.three::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
+    }
+    .shot.one::after {
+      content: "";
+      position: absolute;
+      left: 16px; right: 16px; bottom: 18px; height: 84px;
+      border: 1px solid rgba(245,255,0,0.45);
+      background: rgba(7,11,15,0.38);
+      border-radius: 10px;
+    }
+    .shot.two::after {
+      content: "";
+      position: absolute;
+      left: 28px; right: 28px; top: 48px; bottom: 26px;
+      border: 1px solid rgba(0,199,255,0.45);
+      background: rgba(8,12,17,0.26);
+      border-radius: 12px;
+    }
+    .shot.three::after {
+      content: "";
+      position: absolute;
+      left: 20px; right: 20px; top: 36px; bottom: 30px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 12px;
+      background: rgba(9,14,18,0.25);
+      border: 1px solid rgba(72,242,165,0.45);
+      border-radius: 12px;
+    }
+    .shot.three::before {
+      background: none;
+    }
+    .pad-mini {
+      background: radial-gradient(circle at 35% 25%, #c5af8b, #75614b 60%, #2d211b);
+      border: 2px solid rgba(255,255,255,0.8);
+      border-radius: 18px;
+      box-shadow: inset 0 -8px 10px rgba(0,0,0,0.5);
+    }
+    .caption {
+      margin-top: 12px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>AIR//STUDIO UI GALLERY</h1>
+    <div class="grid">
+      <div class="card">
+        <div class="shot one"></div>
+        <div class="caption">LIVE STAGE VIEW</div>
+      </div>
+      <div class="card">
+        <div class="shot two"></div>
+        <div class="caption">HAND TRACKING / PLAY AREA</div>
+      </div>
+      <div class="card">
+        <div class="shot three"></div>
+        <div class="caption">DRUM GRID</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
