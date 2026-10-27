@@ -163,7 +163,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 #kb-hint { position:absolute; bottom:16px; left:16px; z-index:15; font-size:8px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; background:rgba(8,8,8,0.88); padding:6px 12px; border:1px solid var(--border); border-radius:2px; pointer-events:none; opacity:0; transition:opacity 0.3s; }
 #kb-hint.show { opacity:1; }
 
-#right { border-left:3px solid var(--border); background:var(--panel); display:flex; flex-direction:column; overflow:hidden; }
+#right { border-left:3px solid var(--border); background:var(--panel); display:flex; flex-direction:column; overflow-x:hidden; overflow-y:auto; }
 
 #inst-switch { padding:12px 14px; border-bottom:1px solid var(--border); display:flex; gap:6px; flex-wrap:wrap; flex-shrink:0; }
 .inst-btn { padding:8px 12px; border:1px solid var(--border); background:rgba(255,255,255,0.05); color:var(--dim); font-family:'Bebas Neue',sans-serif; font-size:9px; letter-spacing:2px; cursor:pointer; transition:all 0.15s; border-radius:2px; }
@@ -172,35 +172,43 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 .inst-btn.secondary { background:rgba(0,170,255,0.12); color:var(--blue); border-color:rgba(0,170,255,0.6); }
 .inst-btn.secondary:hover { background:rgba(0,170,255,0.2); color:var(--blue); }
 
-#pad-grid { display:flex; flex-direction:column; gap:12px; background:none; flex-shrink:0; padding:16px 14px; }
+#pad-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:auto minmax(0,1fr); gap:8px 10px; background:none; flex:0 0 auto; min-height:0; padding:10px; overflow:visible; align-content:start; }
 #pad-grid.gone { display:none; }
-#pad-grid.mini { gap:8px; padding:12px 10px; }
-#pad-grid.mini .pad { width:62px; height:62px; }
-#pad-grid.mini .drum-center { font-size:22px; }
+#pad-grid.mini { gap:6px; padding:8px; }
+#pad-grid.mini .pad { aspect-ratio:1.55; }
+#pad-grid.mini .drum-center { font-size:17px; }
 #piano-keys.mini { height:112px; }
 #piano-keys.mini .pk.white { min-width:0; }
 #piano-keys.mini .pk.black { width:6.2%; }
 
-.drum-side-lbl { font-size:8px; letter-spacing:3px; color:var(--dim); text-transform:uppercase; font-weight:600; padding:0 6px; margin-bottom:5px; }
+.drum-side-lbl { font-size:8px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; font-weight:600; padding:0 3px; margin:0; }
 .drum-side-lbl.left-lbl { color:var(--blue); }
-.drum-side-lbl.right-lbl { color:var(--green); text-align:right; }
+.drum-side-lbl.right-lbl { color:var(--green); text-align:left; }
 
-.drum-cluster { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; justify-items:center; }
-.pad { position:relative; width:90px; height:90px; flex-shrink:0; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.12s; }
-.pad.electronic { width:76px; height:76px; }
+.drum-side-lbl.left-lbl { grid-column:1; grid-row:1; }
+.drum-side-lbl.right-lbl { grid-column:2; grid-row:1; }
+.drum-cluster { display:grid; grid-template-columns:minmax(0,1fr); gap:8px; min-width:0; min-height:0; }
+.drum-cluster.left-cluster { grid-column:1; grid-row:2; }
+.drum-cluster.right-cluster { grid-column:2; grid-row:2; }
+.pad { position:relative; width:100%; aspect-ratio:1.25; min-width:0; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.12s, filter 0.12s; border-radius:6px; overflow:hidden; }
+.pad:hover { transform:translateY(-2px); filter:brightness(1.15); }
 
-.drum-body { position:absolute; inset:0; border-radius:24%; background:radial-gradient(circle at 30% 25%, #b7a37c 0%, #7e6248 30%, #473826 60%, #241c13 100%); border:3px solid rgba(230,230,230,0.82); box-shadow:inset 0 -6px 12px rgba(0,0,0,0.72), inset 0 10px 18px rgba(255,255,255,0.08), 0 10px 24px rgba(0,0,0,0.7); }
-.drum-rim { position:absolute; inset:8px; border-radius:22%; border:4px solid rgba(255,255,255,0.8); box-shadow:inset 0 1px 3px rgba(255,255,255,0.25), 0 3px 10px rgba(0,0,0,0.4); }
-.drum-center { position:absolute; inset:18px; border-radius:18%; background:linear-gradient(135deg, #9b7d5d 0%, #5d4635 100%); display:flex; align-items:center; justify-content:center; font-size:30px; z-index:2; box-shadow:inset 0 0 18px rgba(0,0,0,0.18); }
+.pad.cymbal-pad .drum-body { background:radial-gradient(circle, #c49646 0%, #7d501d 100%); border:2px solid #e0aa53; }
+.pad.cymbal-pad .drum-center { background:radial-gradient(circle, #fde293 0%, #aa7a28 100%); font-size:18px; }
 
-.pad.lit .drum-body { background:radial-gradient(circle at 30% 25%, #fff5a8 0%, #ffe95d 20%, #f0c542 45%, #aa7d18 100%); box-shadow:inset 0 -6px 12px rgba(0,0,0,0.38), 0 0 20px rgba(245,255,0,0.9); }
-.pad.lit .drum-rim { border-color:rgba(255,255,255,0.95); box-shadow:inset 0 1px 4px rgba(255,255,255,0.5), 0 0 18px rgba(245,255,0,0.7); }
-.pad.lit .drum-center { background:linear-gradient(135deg, var(--acc) 0%, #f1d649 100%); }
+.pad.drum-pad .drum-body { background:linear-gradient(145deg, #2c363f, #182026); border:2px solid rgba(180, 200, 215, 0.7); }
+.pad.drum-pad .drum-center { background:radial-gradient(circle, #ded7c7 0%, #b8ad96 100%); font-size:18px; }
 
-#pad-grid[data-layout="standard"] .drum-cluster { gap:14px; }
-#pad-grid[data-layout="mini"] .drum-cluster { gap:8px; }
-#pad-grid[data-layout="mini"] .pad { width:66px; height:66px; }
-#pad-grid[data-layout="mini"] .drum-center { inset:14px; }
+.drum-body { position:absolute; inset:0; border-radius:6px; box-shadow:inset 0 1px rgba(255,255,255,0.15), 0 4px 10px rgba(0,0,0,0.5); }
+.drum-rim { position:absolute; inset:4px; border-radius:4px; border:1px solid rgba(255,255,255,0.3); pointer-events:none; }
+.drum-center { position:absolute; inset:8px; border-radius:4px; display:flex; align-items:center; justify-content:center; z-index:2; }
+.pad-label { position:absolute; left:2px; right:2px; bottom:3px; z-index:3; overflow:hidden; color:#FFFFFF; font-size:8px; font-weight:700; text-align:center; text-shadow:0 1px 3px #000; letter-spacing:1px; }
+
+.pad.lit { transform:scale(0.96); filter:brightness(1.4); }
+.pad.lit .drum-body { box-shadow:0 0 24px rgba(245,255,0,0.95); }
+
+#pad-grid[data-layout="mini"] .drum-cluster { gap:6px; }
+#pad-grid[data-layout="mini"] .pad-label { font-size:7px; }
 
 #piano-keys { display:flex; flex-shrink:0; position:relative; background:rgba(10,10,10,0.84); padding:0; height:150px; border:1px solid rgba(255,255,255,0.06); box-shadow:inset 0 0 30px rgba(0,0,0,0.35); }
 #piano-keys.gone { display:none; }
@@ -236,7 +244,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 .stat-lbl { font-size:7px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; font-weight:600; }
 .stat-val { font-family:'Bebas Neue',sans-serif; font-size:16px; color:var(--acc); font-weight:700; }
 
-#beat-wrap { flex:1; padding:12px 14px; display:flex; flex-direction:column; justify-content:flex-end; gap:8px; }
+#beat-wrap { flex:0 0 auto; padding:12px 14px; display:flex; flex-direction:column; justify-content:flex-end; gap:8px; }
 .bn { font-family:'Bebas Neue',sans-serif; font-size:68px; line-height:1; color:var(--fg); transition:all 0.1s; font-weight:700; }
 .bn.flash { color:var(--acc); filter:drop-shadow(0 0 8px var(--acc)); }
 
@@ -256,6 +264,65 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 .shortcut-hint { position:fixed; bottom:20px; right:20px; z-index:50; background:rgba(8,8,8,0.95); border:2px solid var(--border); padding:12px 16px; border-radius:3px; font-size:8px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; display:none; max-width:200px; }
 .shortcut-hint.show { display:block; animation:slideIn 0.3s ease; }
 @keyframes slideIn { from { transform:translateX(300px); opacity:0; } to { transform:translateX(0); opacity:1; } }
+
+@media (max-width:850px) and (min-width:601px) {
+  .h-logo { padding:0 14px; font-size:25px; letter-spacing:3px; }
+  .h-tag { display:none; }
+  .h-stats { flex:1; justify-content:flex-end; }
+  .h-cell { padding:0 9px; gap:5px; letter-spacing:1px; }
+  #body { grid-template-columns:190px minmax(0,1fr) 220px; }
+  #right { overflow-x:hidden; overflow-y:auto; }
+  #pad-grid { flex:0 0 auto; overflow:visible; }
+  #beat-wrap { flex:0 0 auto; padding:8px 10px; }
+  .bn { font-size:44px; }
+}
+
+@media (max-width:600px) {
+  #app { grid-template-rows:44px minmax(0,1fr) 38px; border-width:0; }
+  #header { border-bottom-width:2px; }
+  .h-logo { padding:0 10px; font-size:22px; letter-spacing:2px; }
+  .h-tag { display:none; }
+  .h-stats { flex:1; justify-content:flex-end; }
+  .h-cell { padding:0 6px; gap:4px; font-size:7px; letter-spacing:0; }
+  .h-cell:nth-child(n+3) { display:none; }
+  .dot { width:8px; height:8px; }
+  #body { grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:minmax(220px,1.1fr) minmax(220px,0.9fr); }
+  #left { grid-column:1; grid-row:2; min-width:0; border-right-width:1px; overflow-y:auto; }
+  #stage { grid-column:1 / -1; grid-row:1; min-width:0; min-height:0; }
+  #right { grid-column:2; grid-row:2; min-width:0; border-left:0; border-top:2px solid var(--border); overflow-x:hidden; overflow-y:auto; }
+  .pt { padding:6px 8px; font-size:7px; letter-spacing:2px; }
+  .ctrl-btns { padding:6px; gap:4px; }
+  .ctrl-btn { min-width:0; padding:8px 4px; font-size:9px; letter-spacing:1px; }
+  .vol-wrap, .sens-wrap { padding:7px 8px; }
+  .vol-row { margin-bottom:5px; }
+  .vol-num { font-size:18px; }
+  .sens-num { font-size:16px; }
+  .sens-lbl, .vol-lbl { font-size:7px; letter-spacing:1px; }
+  #log { min-height:48px; padding:6px 8px; }
+  .ll { font-size:9px; line-height:1.7; }
+  #inst-switch { padding:6px; gap:4px; }
+  .inst-btn { padding:6px 7px; font-size:8px; letter-spacing:1px; }
+  #pad-grid { flex:0 0 auto; padding:6px; gap:6px; overflow:visible; }
+  .drum-cluster { gap:6px; }
+  .drum-center { font-size:17px; }
+  .pad-label { font-size:7px; }
+  #piano-keys { height:100px; min-height:0; }
+  .pk-nm { font-size:7px; }
+  #wf-wrap, #stats-panel { padding:6px 8px; }
+  #wf-canvas { height:30px; }
+  #beat-wrap { flex:0 0 auto; padding:6px 8px; }
+  .bn { font-size:30px; }
+  #footer { grid-template-columns:repeat(7,minmax(0,1fr)); }
+  .fc { padding:4px 5px; gap:2px; min-width:0; }
+  .fk { font-size:6px; letter-spacing:0; }
+  .fv { font-size:8px; letter-spacing:0; }
+}
+
+@media (max-width:600px) and (max-height:520px) {
+  #app { grid-template-rows:38px minmax(0,1fr) 32px; }
+  #body { grid-template-rows:minmax(100px,1fr) minmax(140px,1fr); overflow-y:auto; }
+  #left, #right { overflow-y:auto; }
+}
 </style>
 </head>
 <body>
@@ -409,7 +476,6 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
       </div>
       <div id="zlabel"></div>
       <div id="inst-overlay"></div>
-      <div id="info-pill" class="hidden">LONG KEY</div>
       <div id="privacy-badge">🔒 FACE BLURRED</div>
     </div>
 
@@ -418,7 +484,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
         <button class="inst-btn active" data-inst="drums" title="Press D">DRUMS</button>
         <button class="inst-btn" data-inst="piano" title="Press Shift+P">PIANO</button>
         <button class="inst-btn" data-inst="xylophone" title="Press X">XYLOPHONE</button>
-        <button id="layout-mode-btn" class="inst-btn secondary" type="button" title="Toggle longer keyboard layout">LONG KEYS OFF</button>
+        <button id="layout-mode-btn" class="inst-btn secondary" type="button" title="Toggle standard or mini layout">LAYOUT: STANDARD</button>
       </div>
       <div class="pt" id="right-title">// ACOUSTIC DRUMS</div>
       <div id="pad-grid"></div>
@@ -457,24 +523,22 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
 <script>'use strict';
 
-// INSTRUMENTS
-const DRUMS_LEFT = [
-  { id:'kick1', icon:'🥁', label:'KICK', type:'kick' },
-  { id:'snare1', icon:'🥁', label:'SNARE', type:'snare' },
-  { id:'clap1', icon:'🥁', label:'CLAP', type:'clap' },
-  { id:'hat1', icon:'🥁', label:'HAT', type:'hat' },
-];
-const DRUMS_RIGHT = [
-  { id:'tom1', icon:'🥁', label:'TOM-HI', type:'tom' },
-  { id:'tom2', icon:'🥁', label:'TOM-MID', type:'tom-mid' },
-  { id:'ride1', icon:'🥁', label:'RIDE', type:'ride' },
-  { id:'crash1', icon:'🥁', label:'CRASH', type:'crash' },
+// INSTRUMENTS — 10-PIECE ACOUSTIC & CYBER DRUM KIT (MATCHING LAYOUT 2)
+const DRUM_KIT = [
+  { id:'crash',      label:'CRASH',         type:'cymbal', cx:0.16, cy:0.33, r:0.115, color:'#c89346', ring:'#8d5120', key:'Q' },
+  { id:'splash',     label:'SPLASH',        type:'cymbal', cx:0.50, cy:0.30, r:0.086, color:'#d89b4b', ring:'#9e4a1a', key:'W' },
+  { id:'ride',       label:'RIDE',          type:'cymbal', cx:0.84, cy:0.33, r:0.118, color:'#2d8c82', ring:'#195953', key:'E' },
+  { id:'tom1',       label:'HIGH TOM',      type:'drum',   cx:0.32, cy:0.46, r:0.100, color:'#5e7542', ring:'#889e60', key:'A' },
+  { id:'tom2',       label:'MID TOM',       type:'drum',   cx:0.68, cy:0.46, r:0.100, color:'#5e7542', ring:'#889e60', key:'S' },
+  { id:'snare',      label:'SNARE',         type:'drum',   cx:0.50, cy:0.62, r:0.128, color:'#a6613c', ring:'#c78663', key:'D' },
+  { id:'closed_hat', label:'CLOSED HI-HAT', type:'cymbal', cx:0.09, cy:0.64, r:0.084, color:'#c0853c', ring:'#88441b', key:'Z' },
+  { id:'open_hat',   label:'OPEN HI-HAT',   type:'cymbal', cx:0.91, cy:0.64, r:0.084, color:'#ba5d32', ring:'#8a3915', key:'C' },
+  { id:'floor_tom',  label:'FLOOR TOM',     type:'drum',   cx:0.27, cy:0.81, r:0.126, color:'#4e6337', ring:'#768e54', key:'X' },
+  { id:'bass',       label:'BASS / KICK',   type:'drum',   cx:0.73, cy:0.81, r:0.126, color:'#35777a', ring:'#5aa8ad', key:'B' },
 ];
 
 const PIANO = [
@@ -490,6 +554,7 @@ const PIANO = [
   { id:'A4', label:'A4', freq:440.00, color:'white' },
   { id:'As4',label:'A♯4',freq:466.16, color:'black', after:5 },
   { id:'B4', label:'B4', freq:493.88, color:'white' },
+  { id:'C5', label:'C5', freq:523.25, color:'white' },
 ];
 
 const PIANO_EXTENDED = [
@@ -543,9 +608,19 @@ let privacyMode = false;
 let extendedKeys = false;
 let layoutMode = 'standard';
 let audioCtx, masterGain, analyser, compressor;
-let mpCam, handsInstance;
+let handsInstance;
 let sharedStream = null;
 let currentInst = null;
+let cameraRequestPending = false;
+let systemStarting = false;
+let cameraFrameId = null;
+let cameraFrameCallback = null;
+let frameInFlight = false;
+let lastInferenceAt = 0;
+let cameraRunId = 0;
+let waveformFrameId = null;
+let lastWaveformAt = 0;
+let waveformData = null;
 let totalHits = 0;
 let masterVol = 0.75;
 let gestureThreshold = 0.035;
@@ -555,6 +630,28 @@ let glowR = 0, glowL = 0;
 let fpsFrames = 0, fpsLast = performance.now();
 let recordStartTime = 0;
 let showShortcuts = false;
+let keyboardHintTimer = null;
+let actualLatencyMs = 12;
+let cpuUsagePct = 18;
+
+// AR OVERLAYS & PARALLEL FINGER TRACKING STATES
+const FINGER_LANDMARKS = [4, 8, 12, 16, 20]; // Thumb, Index, Middle, Ring, Pinky
+const multiFingerState = {
+  right: {
+    4:  { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 },
+    8:  { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 },
+    12: { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 },
+    16: { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 },
+    20: { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 }
+  },
+  left: {
+    4:  { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 },
+    8:  { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 },
+    12: { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 },
+    16: { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 },
+    20: { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 }
+  }
+};
 
 const handState = {
   right: { prevY: null, armed: true, zone: -1, missingSince: null, velocity: 0, depth: 0, confidence: 0 },
@@ -567,8 +664,26 @@ let activeVoices = 0;
 const MAX_VOICES = 28;
 const voiceQueue = [];
 
+// Realtime AR Interactive Elements
+let arHitRipples = [];
+let hoveredKeys = {};
+let keyHitStates = {};
+let hoveredDrums = {};
+let drumHitStates = {};
+
+const SKELETON_BONES = [
+  [0, 1], [0, 5], [0, 17],
+  [5, 9], [9, 13], [13, 17],
+  [1, 2], [2, 3], [3, 4],
+  [5, 6], [6, 7], [7, 8],
+  [9, 10], [10, 11], [11, 12],
+  [13, 14], [14, 15], [15, 16],
+  [17, 18], [18, 19], [19, 20]
+];
+
 let isCalibrating = false;
 let calibrationTime = 0;
+let calibrationTimer = null;
 const CALIBRATION_DURATION = 2200;
 let permissionGranted = false;
 let lastFrameTime = 0;
@@ -634,94 +749,344 @@ function releaseVoice(entry) {
   document.getElementById('f-voices').textContent = String(activeVoices).padStart(2, '0');
 }
 
-// DRUM SYNTHESIS
-function playKick(velocity=0.8) {
+// DRUM & PIANO PROFESSIONAL AUDIO SYNTHESIS
+function playKick(velocity=1) {
+  if (!audioCtx) return;
   const t = audioCtx.currentTime;
-  const vol = Math.min(1.4, velocity * 1.7);
-  const g = mkG(vol * 0.96);
+  const vol = Math.min(1.5, Math.max(0.3, velocity * 1.3));
+  const g = mkG(vol);
+
   const o = audioCtx.createOscillator();
   o.connect(g);
-  o.frequency.setValueAtTime(175 * vol, t);
-  o.frequency.exponentialRampToValueAtTime(35, t+0.14);
-  g.gain.setValueAtTime(vol, t);
-  g.gain.exponentialRampToValueAtTime(0.001, t+0.48);
-  const entry = claimVoice(() => { try { o.stop(); } catch(e){} });
+  o.frequency.setValueAtTime(175, t);
+  o.frequency.exponentialRampToValueAtTime(36, t + 0.16);
+
+  // Initial beater click transient
+  const clickSrc = audioCtx.createBufferSource();
+  clickSrc.buffer = noiseBuf(0.015);
+  const clickFilter = audioCtx.createBiquadFilter();
+  clickFilter.type = 'highpass';
+  clickFilter.frequency.value = 2800;
+  const clickGain = mkG(0.6 * vol);
+  clickSrc.connect(clickFilter);
+  clickFilter.connect(clickGain);
+
+  g.gain.setValueAtTime(vol * 1.1, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.52);
+
+  const entry = claimVoice(() => { try { o.stop(); clickSrc.stop(); } catch(e){} });
   o.start(t);
-  o.stop(t+0.48);
+  clickSrc.start(t);
+  o.stop(t + 0.52);
+  clickSrc.stop(t + 0.015);
   o.onended = () => releaseVoice(entry);
 }
 
-function playSnare(velocity=0.7) {
+function playSnare(velocity=1) {
+  if (!audioCtx) return;
   const t = audioCtx.currentTime;
-  const vol = Math.min(1.2, velocity * 1.5);
-  const g1 = mkG(0.65 * vol);
-  const o = audioCtx.createOscillator();
-  o.type='sine';
-  o.frequency.value=250;
-  o.connect(g1);
-  g1.gain.setValueAtTime(0.65 * vol, t);
-  g1.gain.exponentialRampToValueAtTime(0.001, t+0.11);
+  const vol = Math.min(1.4, Math.max(0.3, velocity * 1.2));
 
+  // Drum body tone
+  const g1 = mkG(0.7 * vol);
+  const o1 = audioCtx.createOscillator();
+  o1.type = 'triangle';
+  o1.frequency.setValueAtTime(195, t);
+  o1.frequency.exponentialRampToValueAtTime(120, t + 0.12);
+  o1.connect(g1);
+  g1.gain.setValueAtTime(0.7 * vol, t);
+  g1.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+
+  // Snare bottom wires (crisp filtered noise)
   const src = audioCtx.createBufferSource();
-  src.buffer = noiseBuf(0.35);
+  src.buffer = noiseBuf(0.32);
   const hpf = audioCtx.createBiquadFilter();
-  hpf.type='highpass';
-  hpf.frequency.value=4200;
-  hpf.Q.value=0.6;
-  const g2 = mkG(0.85 * vol);
+  hpf.type = 'highpass';
+  hpf.frequency.value = 2200;
+  const bpf = audioCtx.createBiquadFilter();
+  bpf.type = 'bandpass';
+  bpf.frequency.value = 4500;
+  bpf.Q.value = 0.8;
+  const g2 = mkG(0.95 * vol);
   src.connect(hpf);
-  hpf.connect(g2);
-  g2.gain.setValueAtTime(0.85 * vol, t);
-  g2.gain.exponentialRampToValueAtTime(0.001, t+0.28);
+  hpf.connect(bpf);
+  bpf.connect(g2);
+  g2.gain.setValueAtTime(0.95 * vol, t);
+  g2.gain.exponentialRampToValueAtTime(0.001, t + 0.30);
 
-  const entry = claimVoice(() => { try { o.stop(); src.stop(); } catch(e){} });
-  o.start(t);
-  o.stop(t+0.11);
+  const entry = claimVoice(() => { try { o1.stop(); src.stop(); } catch(e){} });
+  o1.start(t);
   src.start(t);
+  o1.stop(t + 0.16);
+  src.stop(t + 0.30);
   src.onended = () => releaseVoice(entry);
 }
 
-function playTom(velocity=0.75, pitch='high') {
+function playTom(velocity=1, pitch='high') {
+  if (!audioCtx) return;
   const t = audioCtx.currentTime;
-  const vol = Math.min(1.25, velocity * 1.6);
-  const baseFreq = pitch === 'mid' ? 155 : 220;
-  const dur = pitch === 'mid' ? 0.36 : 0.3;
-  const g = mkG(vol * 0.91);
+  const vol = Math.min(1.4, Math.max(0.3, velocity * 1.25));
+  let startF = 230, endF = 110, dur = 0.36;
+  if (pitch === 'mid') { startF = 175; endF = 85; dur = 0.40; }
+  else if (pitch === 'floor') { startF = 115; endF = 52; dur = 0.50; }
+
+  const g = mkG(vol);
   const o = audioCtx.createOscillator();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(startF, t);
+  o.frequency.exponentialRampToValueAtTime(endF, t + dur * 0.65);
   o.connect(g);
-  o.frequency.setValueAtTime(baseFreq * vol, t);
-  o.frequency.exponentialRampToValueAtTime(80, t+dur*0.55);
+
   g.gain.setValueAtTime(vol, t);
-  g.gain.exponentialRampToValueAtTime(0.001, t+dur);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
   const entry = claimVoice(() => { try { o.stop(); } catch(e){} });
   o.start(t);
-  o.stop(t+dur);
+  o.stop(t + dur);
   o.onended = () => releaseVoice(entry);
 }
 
-function playNote(freq, dur=0.7, velocity=1) {
+function playHiHat(velocity=1, isOpen=false) {
+  if (!audioCtx) return;
   const t = audioCtx.currentTime;
-  const g = mkG(0.42 * velocity);
+  const vol = Math.min(1.3, Math.max(0.25, velocity * 1.1));
+  const dur = isOpen ? 0.44 : 0.06;
+
+  // 6 metallic ring oscillators
+  const freqs = [205, 304, 369, 522, 540, 800];
+  const g = mkG(vol * 0.85);
+  const hpf = audioCtx.createBiquadFilter();
+  hpf.type = 'highpass';
+  hpf.frequency.value = 7200;
+  hpf.connect(g);
+
+  const oscs = freqs.map(f => {
+    const osc = audioCtx.createOscillator();
+    osc.type = 'square';
+    osc.frequency.value = f;
+    osc.connect(hpf);
+    return osc;
+  });
+
+  // White noise burst for initial stick hit
+  const stick = audioCtx.createBufferSource();
+  stick.buffer = noiseBuf(dur);
+  const stickFilter = audioCtx.createBiquadFilter();
+  stickFilter.type = 'bandpass';
+  stickFilter.frequency.value = 9500;
+  stickFilter.Q.value = 1.4;
+  stick.connect(stickFilter);
+  stickFilter.connect(g);
+
+  g.gain.setValueAtTime(vol * 0.9, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
+  const entry = claimVoice(() => {
+    try { oscs.forEach(o => o.stop()); stick.stop(); } catch(e){}
+  });
+  oscs.forEach(o => { o.start(t); o.stop(t + dur); });
+  stick.start(t);
+  stick.stop(t + dur);
+  stick.onended = () => releaseVoice(entry);
+}
+
+function playCrash(velocity=1) {
+  if (!audioCtx) return;
+  const t = audioCtx.currentTime;
+  const vol = Math.min(1.4, Math.max(0.3, velocity * 1.2));
+  const dur = 1.45;
+
+  const g = mkG(vol * 0.95);
+  const hpf = audioCtx.createBiquadFilter();
+  hpf.type = 'highpass';
+  hpf.frequency.value = 4600;
+  hpf.connect(g);
+
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuf(dur);
+  noise.connect(hpf);
+
+  // Metallic ring overtone
   const o1 = audioCtx.createOscillator();
-  o1.type='sine';
-  o1.frequency.value=freq;
+  o1.type = 'square';
+  o1.frequency.value = 720;
   const o2 = audioCtx.createOscillator();
-  o2.type='sine';
-  o2.frequency.value=freq*2.007;
-  o1.connect(g);
-  o2.connect(g);
-  g.gain.setValueAtTime(0.42 * velocity, t);
-  g.gain.setValueAtTime(0.40 * velocity, t+dur*0.18);
-  g.gain.exponentialRampToValueAtTime(0.001, t+dur);
-  const entry = claimVoice(() => { try { o1.stop(); o2.stop(); } catch(e){} });
+  o2.type = 'square';
+  o2.frequency.value = 1180;
+  o1.connect(hpf);
+  o2.connect(hpf);
+
+  g.gain.setValueAtTime(vol * 0.95, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
+  const entry = claimVoice(() => {
+    try { noise.stop(); o1.stop(); o2.stop(); } catch(e){}
+  });
+  noise.start(t);
   o1.start(t);
-  o1.stop(t+dur);
   o2.start(t);
-  o2.stop(t+dur);
+  noise.stop(t + dur);
+  o1.stop(t + dur * 0.7);
+  o2.stop(t + dur * 0.7);
+  noise.onended = () => releaseVoice(entry);
+}
+
+function playSplash(velocity=1) {
+  if (!audioCtx) return;
+  const t = audioCtx.currentTime;
+  const vol = Math.min(1.3, Math.max(0.3, velocity * 1.15));
+  const dur = 0.34;
+
+  const g = mkG(vol * 0.9);
+  const hpf = audioCtx.createBiquadFilter();
+  hpf.type = 'highpass';
+  hpf.frequency.value = 6500;
+  hpf.connect(g);
+
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuf(dur);
+  noise.connect(hpf);
+
+  g.gain.setValueAtTime(vol * 0.9, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
+  const entry = claimVoice(() => { try { noise.stop(); } catch(e){} });
+  noise.start(t);
+  noise.stop(t + dur);
+  noise.onended = () => releaseVoice(entry);
+}
+
+function playRide(velocity=1) {
+  if (!audioCtx) return;
+  const t = audioCtx.currentTime;
+  const vol = Math.min(1.3, Math.max(0.3, velocity * 1.15));
+  const dur = 1.35;
+
+  // 1. Pure bell chime ping
+  const pingG = mkG(vol * 0.7);
+  const ping = audioCtx.createOscillator();
+  ping.type = 'sine';
+  ping.frequency.setValueAtTime(2150, t);
+  ping.connect(pingG);
+  pingG.gain.setValueAtTime(vol * 0.7, t);
+  pingG.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+
+  // 2. Metallic cymbal body wash
+  const bodyG = mkG(vol * 0.6);
+  const hpf = audioCtx.createBiquadFilter();
+  hpf.type = 'highpass';
+  hpf.frequency.value = 5200;
+  hpf.connect(bodyG);
+
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuf(dur);
+  noise.connect(hpf);
+
+  bodyG.gain.setValueAtTime(vol * 0.6, t);
+  bodyG.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
+  const entry = claimVoice(() => {
+    try { ping.stop(); noise.stop(); } catch(e){}
+  });
+  ping.start(t);
+  noise.start(t);
+  ping.stop(t + 0.38);
+  noise.stop(t + dur);
+  noise.onended = () => releaseVoice(entry);
+}
+
+function playDrumSound(drumId, velocity=1) {
+  if (drumId === 'bass') playKick(velocity);
+  else if (drumId === 'snare') playSnare(velocity);
+  else if (drumId === 'tom1') playTom(velocity, 'high');
+  else if (drumId === 'tom2') playTom(velocity, 'mid');
+  else if (drumId === 'floor_tom') playTom(velocity, 'floor');
+  else if (drumId === 'closed_hat') playHiHat(velocity, false);
+  else if (drumId === 'open_hat') playHiHat(velocity, true);
+  else if (drumId === 'crash') playCrash(velocity);
+  else if (drumId === 'splash') playSplash(velocity);
+  else if (drumId === 'ride') playRide(velocity);
+}
+
+// RICH ACOUSTIC / ELECTRIC PIANO SYNTHESIS
+function playNote(freq, dur=0.85, velocity=1) {
+  if (!audioCtx) return;
+  const t = audioCtx.currentTime;
+  const safeVel = Math.min(1.5, Math.max(0.2, velocity));
+
+  const noteGain = audioCtx.createGain();
+  const peakGain = 0.44 * safeVel;
+  noteGain.gain.setValueAtTime(0.0001, t);
+  noteGain.gain.linearRampToValueAtTime(peakGain, t + 0.006);
+  noteGain.gain.exponentialRampToValueAtTime(peakGain * 0.68, t + 0.14);
+  noteGain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  noteGain.connect(masterGain);
+
+  // Dynamic Lowpass Filter (acoustic piano hammer dampening)
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'lowpass';
+  const cutoffStart = Math.min(14000, 2400 + freq * 2.8 * safeVel);
+  const cutoffEnd = Math.max(380, freq * 1.5);
+  filter.frequency.setValueAtTime(cutoffStart, t);
+  filter.frequency.exponentialRampToValueAtTime(cutoffEnd, t + dur * 0.72);
+  filter.Q.value = 1.1;
+  filter.connect(noteGain);
+
+  // 1. Fundamental Warm Triangle
+  const o1 = audioCtx.createOscillator();
+  o1.type = 'triangle';
+  o1.frequency.setValueAtTime(freq, t);
+
+  // 2. Body Tone Sine (slight acoustic chorus detune)
+  const o2 = audioCtx.createOscillator();
+  o2.type = 'sine';
+  o2.frequency.setValueAtTime(freq * 1.0016, t);
+
+  // 3. Second Harmonic Octave Shimmer
+  const o3 = audioCtx.createOscillator();
+  o3.type = 'sine';
+  o3.frequency.setValueAtTime(freq * 2.003, t);
+  const g3 = audioCtx.createGain();
+  g3.gain.setValueAtTime(0.32, t);
+  g3.gain.exponentialRampToValueAtTime(0.005, t + dur * 0.55);
+  o3.connect(g3);
+  g3.connect(filter);
+
+  // 4. Hammer transient tap
+  const strikeSrc = audioCtx.createBufferSource();
+  strikeSrc.buffer = noiseBuf(0.024);
+  const strikeFilter = audioCtx.createBiquadFilter();
+  strikeFilter.type = 'bandpass';
+  strikeFilter.frequency.value = Math.min(5000, freq * 3.4);
+  strikeFilter.Q.value = 1.8;
+  const strikeGain = audioCtx.createGain();
+  strikeGain.gain.setValueAtTime(0.16 * safeVel, t);
+  strikeGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.024);
+  strikeSrc.connect(strikeFilter);
+  strikeFilter.connect(strikeGain);
+  strikeGain.connect(noteGain);
+
+  o1.connect(filter);
+  o2.connect(filter);
+
+  const entry = claimVoice(() => {
+    try { o1.stop(); o2.stop(); o3.stop(); strikeSrc.stop(); } catch(e){}
+  });
+
+  o1.start(t);
+  o2.start(t);
+  o3.start(t);
+  strikeSrc.start(t);
+
+  o1.stop(t + dur);
+  o2.stop(t + dur);
+  o3.stop(t + dur);
+  strikeSrc.stop(t + 0.024);
   o1.onended = () => releaseVoice(entry);
 }
 
 function playXylophone(freq, velocity=1) {
+  if (!audioCtx) return;
   const t = audioCtx.currentTime;
   const g = mkG(0.6 * velocity);
   const o1 = audioCtx.createOscillator();
@@ -775,29 +1140,17 @@ function switchInstrument(inst) {
 }
 
 function updateSwitchButtons() {
-  document.querySelectorAll('.inst-btn').forEach(b => {
+  document.querySelectorAll('.inst-btn[data-inst]').forEach(b => {
     b.classList.toggle('active', b.dataset.inst === currentInst);
   });
 }
 
 function getPianoSet() {
-  return extendedKeys ? PIANO_EXTENDED : PIANO;
+  return PIANO;
 }
 
 function getXylophoneSet() {
-  return extendedKeys ? XYLOPHONE_EXTENDED : XYLOPHONE;
-}
-
-function toggleExtendedKeys() {
-  extendedKeys = !extendedKeys;
-  const btn = document.getElementById('layout-mode-btn');
-  if (btn) {
-    btn.textContent = extendedKeys ? 'LONG KEYS ON' : 'LONG KEYS OFF';
-    btn.classList.toggle('active', extendedKeys);
-  }
-  const infoPill = document.getElementById('info-pill');
-  if (infoPill) infoPill.classList.toggle('hidden', !extendedKeys);
-  if (currentInst) buildUI();
+  return XYLOPHONE;
 }
 
 function toggleLayoutMode() {
@@ -816,12 +1169,10 @@ function buildUI() {
     layoutBtn.textContent = layoutMode === 'mini' ? 'LAYOUT: MINI' : 'LAYOUT: STANDARD';
     layoutBtn.classList.toggle('active', layoutMode === 'mini');
   }
-  const infoPill = document.getElementById('info-pill');
-  if (infoPill) infoPill.classList.toggle('hidden', !extendedKeys);
 
   if (currentInst === 'drums') {
-    document.getElementById('right-title').textContent = '// ACOUSTIC DRUMS';
-    document.getElementById('inst-overlay').textContent = '🥁 DRUMS';
+    document.getElementById('right-title').textContent = '// 10-PIECE ULTRA DRUM KIT';
+    document.getElementById('inst-overlay').textContent = '🥁 DRUMS ULTRA';
     document.getElementById('f-inst').textContent = 'DRUMS';
     const drumGrid = document.getElementById('pad-grid');
     drumGrid.classList.remove('gone');
@@ -830,7 +1181,7 @@ function buildUI() {
     document.getElementById('piano-keys').classList.add('gone');
     buildDrumPads();
   } else if (currentInst === 'piano') {
-    document.getElementById('right-title').textContent = '// PIANO';
+    document.getElementById('right-title').textContent = '// CHROMATIC PIANO';
     document.getElementById('inst-overlay').textContent = '🎹 PIANO';
     document.getElementById('f-inst').textContent = 'PIANO';
     document.getElementById('pad-grid').classList.add('gone');
@@ -851,38 +1202,51 @@ function buildUI() {
 function buildDrumPads() {
   const grid = document.getElementById('pad-grid');
   grid.innerHTML = '';
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+  grid.style.gap = '8px';
 
-  const lLbl = document.createElement('div');
-  lLbl.className = 'drum-side-lbl left-lbl';
-  lLbl.textContent = '◀ LEFT';
-  grid.appendChild(lLbl);
-
-  const lCluster = document.createElement('div');
-  lCluster.className = 'drum-cluster';
-  DRUMS_LEFT.forEach(p => {
+  DRUM_KIT.forEach(p => {
     const d = document.createElement('div');
-    d.className = 'pad electronic';
+    d.className = 'pad ' + (p.type === 'cymbal' ? 'cymbal-pad' : 'drum-pad');
     d.id = 'pad-' + p.id;
-    d.innerHTML = `<div class="drum-body"></div><div class="drum-rim"></div><div class="drum-center">${p.icon}</div><div style="position:absolute;bottom:-24px;font-size:9px;color:var(--dim);font-weight:600;">${p.label}</div>`;
-    lCluster.appendChild(d);
+    d.onclick = () => triggerDrumHit(p.id, 1);
+    const icon = p.type === 'cymbal' ? '🟡' : '🥁';
+    d.innerHTML = `
+      <div class="drum-body" style="border-color:${p.ring}"></div>
+      <div class="drum-rim" style="border-color:${p.color}"></div>
+      <div class="drum-center" style="color:${p.color}">${icon}</div>
+      <div class="pad-label">${p.label} [${p.key}]</div>
+    `;
+    grid.appendChild(d);
   });
-  grid.appendChild(lCluster);
+}
 
-  const rLbl = document.createElement('div');
-  rLbl.className = 'drum-side-lbl right-lbl';
-  rLbl.textContent = 'RIGHT ▶';
-  grid.appendChild(rLbl);
+function triggerDrumHit(drumId, velocity=1, x=null, y=null) {
+  const drum = DRUM_KIT.find(d => d.id === drumId);
+  if (!drum) return;
+  playDrumSound(drumId, velocity);
+  drumHitStates[drumId] = performance.now();
 
-  const rCluster = document.createElement('div');
-  rCluster.className = 'drum-cluster';
-  DRUMS_RIGHT.forEach(p => {
-    const d = document.createElement('div');
-    d.className = 'pad electronic';
-    d.id = 'pad-' + p.id;
-    d.innerHTML = `<div class="drum-body"></div><div class="drum-rim"></div><div class="drum-center">${p.icon}</div><div style="position:absolute;bottom:-24px;font-size:9px;color:var(--dim);font-weight:600;">${p.label}</div>`;
-    rCluster.appendChild(d);
+  const padEl = document.getElementById('pad-' + drumId);
+  if (padEl) {
+    padEl.classList.add('lit');
+    setTimeout(() => padEl.classList.remove('lit'), 140);
+  }
+
+  const canvas = document.getElementById('draw-canvas');
+  const rippleX = x !== null ? x : drum.cx * canvas.width;
+  const rippleY = y !== null ? y : drum.cy * canvas.height;
+  arHitRipples.push({
+    x: rippleX,
+    y: rippleY,
+    radius: 12,
+    maxRadius: drum.r * Math.min(canvas.width, canvas.height) * 1.35,
+    color: drum.type === 'cymbal' ? '#F5FF00' : '#00E5FF',
+    alpha: 1.0
   });
-  grid.appendChild(rCluster);
+
+  onHit(drum.label, drum.id, velocity);
 }
 
 function buildPianoKeys() {
@@ -993,7 +1357,7 @@ function flushBatchUpdate() {
 
 function drawFrame(handResults) {
   const now = performance.now();
-  if (now - lastFrameTime < 18) return;
+  if (now - lastFrameTime < 16) return;
   lastFrameTime = now;
   if (!running) return;
 
@@ -1008,33 +1372,45 @@ function drawFrame(handResults) {
     return;
   }
 
+  // 1. Draw Mirrored Camera Stream
   ctx.save();
   ctx.translate(W, 0);
   ctx.scale(-1, 1);
   const video = document.getElementById('webcam');
   if (video.readyState >= 2) {
     if (privacyMode) {
-      ctx.filter = 'blur(8px) saturate(0.8)';
+      ctx.filter = 'blur(10px) saturate(0.75)';
     }
     ctx.drawImage(video, 0, 0, W, H);
     ctx.filter = 'none';
   }
   ctx.restore();
 
-  ctx.fillStyle = currentInst === 'drums' ? 'rgba(0,0,0,0.12)' : 'rgba(0,0,0,0.18)';
+  // Dark cyber vignette overlay
+  ctx.fillStyle = currentInst === 'drums' ? 'rgba(5, 7, 10, 0.22)' : 'rgba(5, 7, 10, 0.28)';
   ctx.fillRect(0, 0, W, H);
 
-  drawPlayfieldGuide(ctx, W, H);
-  if (currentInst === 'drums') drawDrumZones(ctx, W, H);
+  // 2. Draw Interactive AR Instrument Overlay (Bottom 60-70% of Stage)
+  if (currentInst === 'piano') {
+    drawARPianoOverlay(ctx, W, H);
+  } else if (currentInst === 'drums') {
+    drawARDrumsOverlay(ctx, W, H);
+  } else if (currentInst === 'xylophone') {
+    drawARXylophoneOverlay(ctx, W, H);
+  }
 
+  // 3. Draw AR Hit Ripples
+  drawARRipples(ctx);
+
+  // 4. Draw Futuristic Cyber Skeleton Glove on All Detected Hands
   if (handResults && handResults.multiHandLandmarks) {
     handResults.multiHandLandmarks.forEach((lms, i) => {
       drawHand(ctx, lms, handResults.multiHandedness[i].label, W, H);
     });
   }
 
-  glowR = Math.max(0, glowR - 0.1);
-  glowL = Math.max(0, glowL - 0.1);
+  glowR = Math.max(0, glowR - 0.08);
+  glowL = Math.max(0, glowL - 0.08);
 
   fpsFrames++;
   if (now - fpsLast >= 800) {
@@ -1044,136 +1420,446 @@ function drawFrame(handResults) {
   }
 }
 
-function drawPlayfieldGuide(ctx, W, H) {
-  const guideY = H * 0.62;
-  const guideH = H * 0.34;
-  const guideX = W * 0.04;
-  const guideW = W * 0.92;
+// ═══════════════════════════════════════════════
+// AR PIANO OVERLAY (CHROMATIC WHITE & BLACK KEYS)
+// ═══════════════════════════════════════════════
+function getARPianoGeometry(W, H) {
+  const padX = W * 0.035;
+  const keyboardW = W - padX * 2;
+  const topY = H * 0.36; // Covers bottom ~60-64% of camera
+  const bottomY = H * 0.94;
+  const keyboardH = bottomY - topY;
+  const whites = PIANO.filter(k => k.color === 'white');
+  const blacks = PIANO.filter(k => k.color === 'black');
+  const whiteKeyW = keyboardW / whites.length;
+  const blackKeyH = keyboardH * 0.58;
+  const blackKeyW = whiteKeyW * 0.60;
+
+  const whiteBoxes = whites.map((k, i) => {
+    const x = padX + i * whiteKeyW;
+    return {
+      ...k,
+      whiteIndex: i,
+      x: x,
+      y: topY,
+      w: whiteKeyW,
+      h: keyboardH,
+      x1: x,
+      x2: x + whiteKeyW,
+      y1: topY,
+      y2: bottomY
+    };
+  });
+
+  const blackBoxes = blacks.map(k => {
+    const boundaryX = padX + (k.after + 1) * whiteKeyW;
+    const x = boundaryX - blackKeyW / 2;
+    return {
+      ...k,
+      x: x,
+      y: topY,
+      w: blackKeyW,
+      h: blackKeyH,
+      x1: x,
+      x2: x + blackKeyW,
+      y1: topY,
+      y2: topY + blackKeyH
+    };
+  });
+
+  return { padX, topY, bottomY, keyboardW, keyboardH, whiteKeyW, blackKeyW, blackKeyH, whiteBoxes, blackBoxes };
+}
+
+function drawARPianoOverlay(ctx, W, H) {
+  const geom = getARPianoGeometry(W, H);
+  const now = performance.now();
 
   ctx.save();
-  ctx.fillStyle = 'rgba(7, 11, 16, 0.34)';
-  ctx.fillRect(guideX, guideY, guideW, guideH);
+  // Frame Backdrop
+  ctx.fillStyle = 'rgba(8, 12, 18, 0.60)';
+  ctx.fillRect(geom.padX - 8, geom.topY - 26, geom.keyboardW + 16, geom.keyboardH + 34);
 
-  ctx.strokeStyle = 'rgba(245,255,0,0.58)';
+  // Cyber Border & Header
+  ctx.strokeStyle = 'rgba(0, 229, 255, 0.45)';
   ctx.lineWidth = 1.5;
-  ctx.setLineDash([6, 7]);
-  if (typeof ctx.roundRect === 'function') {
-    ctx.beginPath();
-    ctx.roundRect(guideX, guideY, guideW, guideH, 16);
-    ctx.stroke();
-  } else {
-    ctx.strokeRect(guideX, guideY, guideW, guideH);
-  }
-  ctx.setLineDash([]);
+  ctx.strokeRect(geom.padX - 8, geom.topY - 26, geom.keyboardW + 16, geom.keyboardH + 34);
 
-  const label = currentInst ? currentInst.toUpperCase() : 'PLAY AREA';
-  ctx.fillStyle = 'rgba(245,255,0,0.9)';
-  ctx.font = '700 11px "Segoe UI", sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(label + ' ZONE', W / 2, guideY + 20);
+  ctx.fillStyle = '#00E5FF';
+  ctx.font = '700 9px "IBM Plex Mono", monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('// AR CAMERA KEYBED — CHROMATIC C4 TO C5 (MULTI-FINGER TRACKING)', geom.padX + 2, geom.topY - 10);
 
-  const midX = W / 2;
-  const baseY = guideY + guideH * 0.62;
-  ctx.fillStyle = 'rgba(255,255,255,0.08)';
-  ctx.beginPath();
-  ctx.ellipse(midX, baseY, W * 0.18, guideH * 0.26, 0, 0, Math.PI * 2);
-  ctx.fill();
+  // 1. Draw White Keys
+  geom.whiteBoxes.forEach(k => {
+    const isLit = keyHitStates[k.id] && (now - keyHitStates[k.id] < 180);
+    const hoverVal = hoveredKeys[k.id] || 0;
 
-  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-  ctx.lineWidth = 1;
-  const instrumentLine = currentInst === 'drums' ? 2 : 7;
-  if (currentInst === 'drums') {
-    const segment = guideW / 2;
-    ctx.beginPath();
-    ctx.moveTo(guideX + segment, guideY + 8);
-    ctx.lineTo(guideX + segment, guideY + guideH - 8);
-    ctx.stroke();
-
-    const padW = (segment - 24) / 4;
-    for (let i = 0; i < 4; i++) {
-      const x = guideX + 12 + i * padW;
-      ctx.strokeRect(x, guideY + 30, padW - 8, guideH - 46);
+    let fillGrad = ctx.createLinearGradient(k.x, k.y, k.x, k.y2);
+    if (isLit) {
+      fillGrad.addColorStop(0, 'rgba(255, 245, 120, 0.95)');
+      fillGrad.addColorStop(1, 'rgba(245, 210, 0, 0.85)');
+    } else if (hoverVal > 0) {
+      fillGrad.addColorStop(0, `rgba(0, 229, 255, ${0.28 + hoverVal * 0.35})`);
+      fillGrad.addColorStop(1, `rgba(0, 160, 255, ${0.18 + hoverVal * 0.25})`);
+    } else {
+      fillGrad.addColorStop(0, 'rgba(240, 245, 250, 0.22)');
+      fillGrad.addColorStop(1, 'rgba(210, 220, 230, 0.12)');
     }
-    for (let i = 0; i < 4; i++) {
-      const x = guideX + segment + 12 + i * padW;
-      ctx.strokeRect(x, guideY + 30, padW - 8, guideH - 46);
-    }
-  } else {
-    const steps = Array.from({ length: instrumentLine }, (_, i) => i);
-    const keyW = (guideW - 22) / instrumentLine;
-    steps.forEach((_, i) => {
-      const x = guideX + 12 + i * keyW;
-      ctx.strokeRect(x, guideY + 24, keyW - 6, guideH - 42);
-    });
-  }
 
+    ctx.fillStyle = fillGrad;
+    ctx.fillRect(k.x + 1.5, k.y, k.w - 3, k.h);
+
+    ctx.strokeStyle = isLit ? '#FFFFFF' : hoverVal > 0 ? 'rgba(0, 229, 255, 0.85)' : 'rgba(255, 255, 255, 0.22)';
+    ctx.lineWidth = isLit ? 2.5 : 1;
+    ctx.strokeRect(k.x + 1.5, k.y, k.w - 3, k.h);
+
+    ctx.fillStyle = isLit ? '#000000' : '#EFEFEF';
+    ctx.font = '700 12px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(k.label, k.x + k.w / 2, k.y2 - 14);
+  });
+
+  // 2. Draw Black Keys (Elevated on top)
+  geom.blackBoxes.forEach(k => {
+    const isLit = keyHitStates[k.id] && (now - keyHitStates[k.id] < 180);
+    const hoverVal = hoveredKeys[k.id] || 0;
+
+    let fillGrad = ctx.createLinearGradient(k.x, k.y, k.x, k.y2);
+    if (isLit) {
+      fillGrad.addColorStop(0, 'rgba(255, 180, 0, 0.98)');
+      fillGrad.addColorStop(1, 'rgba(245, 255, 0, 0.90)');
+    } else if (hoverVal > 0) {
+      fillGrad.addColorStop(0, `rgba(0, 180, 255, ${0.7 + hoverVal * 0.25})`);
+      fillGrad.addColorStop(1, `rgba(0, 100, 200, ${0.85 + hoverVal * 0.15})`);
+    } else {
+      fillGrad.addColorStop(0, 'rgba(32, 36, 44, 0.92)');
+      fillGrad.addColorStop(1, 'rgba(12, 14, 18, 0.96)');
+    }
+
+    ctx.fillStyle = fillGrad;
+    ctx.fillRect(k.x, k.y, k.w, k.h);
+
+    ctx.strokeStyle = isLit ? '#FFFFFF' : hoverVal > 0 ? '#00E5FF' : 'rgba(0, 0, 0, 0.88)';
+    ctx.lineWidth = isLit ? 2 : 1.2;
+    ctx.strokeRect(k.x, k.y, k.w, k.h);
+
+    ctx.fillStyle = isLit ? '#000000' : 'rgba(255, 255, 255, 0.88)';
+    ctx.font = '700 9px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(k.label, k.x + k.w / 2, k.y2 - 10);
+  });
   ctx.restore();
 }
 
-function drawDrumZones(ctx, W, H) {
-  const gap = W * 0.03;
-  const halfW = (W - gap) / 2;
-  const drumW = halfW / 2;
+// ═══════════════════════════════════════════════
+// AR 10-PIECE DRUM KIT OVERLAY (MATCHING ULTRA LAYOUT 2)
+// ═══════════════════════════════════════════════
+function drawARDrumsOverlay(ctx, W, H) {
+  const now = performance.now();
+  const minDim = Math.min(W, H);
 
-  const drawCluster = (drums, startX) => {
-    drums.forEach((pad, i) => {
-      const x = startX + i * drumW;
-      const cx = x + drumW/2, cy = H/2;
-      const r = Math.min(drumW, H) * 0.37;
+  ctx.save();
+  DRUM_KIT.forEach(drum => {
+    const cx = drum.cx * W;
+    const cy = drum.cy * H;
+    const r = drum.r * minDim;
+    const isLit = drumHitStates[drum.id] && (now - drumHitStates[drum.id] < 160);
+    const hoverVal = hoveredDrums[drum.id] || 0;
 
-      const grad = ctx.createRadialGradient(cx, cy - r*0.35, r*0.08, cx, cy, r);
-      grad.addColorStop(0, 'rgba(155,127,92,0.75)');
-      grad.addColorStop(1, 'rgba(75,60,42,0.55)');
+    if (drum.type === 'cymbal') {
+      // ─── CYMBAL RENDERING (Bronze Lathe Rings & Bell) ───
+      ctx.save();
+      ctx.translate(cx, cy);
+
+      // Outer Bronze Disc with radial lathe gradient
+      const cGrad = ctx.createRadialGradient(0, 0, r * 0.15, 0, 0, r);
+      if (isLit) {
+        cGrad.addColorStop(0, '#FFFFFF');
+        cGrad.addColorStop(0.3, '#FFE95D');
+        cGrad.addColorStop(0.8, '#F5A623');
+        cGrad.addColorStop(1, '#B26A00');
+      } else {
+        cGrad.addColorStop(0, '#d8aa5a');
+        cGrad.addColorStop(0.35, '#a67832');
+        cGrad.addColorStop(0.7, '#d69f45');
+        cGrad.addColorStop(1, '#664516');
+      }
+      ctx.fillStyle = cGrad;
       ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI*2);
-      ctx.fillStyle = grad;
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(232,232,232,0.8)';
-      ctx.lineWidth = 3.5;
+
+      // Lathe Grooves
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.22)';
+      ctx.lineWidth = 1;
+      for (let cr = r * 0.45; cr < r * 0.95; cr += 6) {
+        ctx.beginPath();
+        ctx.arc(0, 0, cr, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Colored Accent Arc Ring (Matching Screenshot)
+      ctx.strokeStyle = isLit ? '#FFFFFF' : hoverVal > 0 ? '#00E5FF' : drum.ring;
+      ctx.lineWidth = r * 0.22;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.72, Math.PI * 0.15, Math.PI * 1.85);
       ctx.stroke();
 
-      ctx.font = 'bold 34px serif';
+      // Center Bell Dome
+      const bellGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 0.28);
+      bellGrad.addColorStop(0, '#FFF2BF');
+      bellGrad.addColorStop(0.7, '#C8933A');
+      bellGrad.addColorStop(1, '#56350E');
+      ctx.fillStyle = bellGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.28, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Center Mounting Hole
+      ctx.fillStyle = '#0a0a0a';
+      ctx.beginPath();
+      ctx.arc(0, 0, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Label Text
+      ctx.fillStyle = isLit ? '#000' : '#FFFFFF';
+      ctx.font = `700 ${Math.max(9, Math.round(r * 0.21))}px "Bebas Neue", sans-serif`;
+      ctx.letterSpacing = '1.5px';
       ctx.textAlign = 'center';
-      ctx.fillStyle = '#FFF';
-      ctx.fillText(pad.icon, cx, cy + 11);
-    });
-  };
+      ctx.fillText(drum.label, 0, r * 0.76);
+      ctx.restore();
 
-  drawCluster(DRUMS_LEFT, 0);
-  drawCluster(DRUMS_RIGHT, halfW + gap);
+    } else {
+      // ─── DRUM RENDERING (Chrome Rim, Lug Bolts, Parchment Skin) ───
+      ctx.save();
+      ctx.translate(cx, cy);
 
-  const grad2 = ctx.createLinearGradient(0, 0, 0, H);
-  grad2.addColorStop(0, 'rgba(0,170,255,0.35)');
-  grad2.addColorStop(1, 'rgba(0,255,102,0.35)');
-  ctx.strokeStyle = grad2;
-  ctx.lineWidth = 2.5;
-  ctx.setLineDash([8, 8]);
-  ctx.beginPath();
-  ctx.moveTo(W/2, 10);
-  ctx.lineTo(W/2, H-10);
-  ctx.stroke();
-  ctx.setLineDash([]);
+      // Heavy Chrome Outer Rim
+      const rimGrad = ctx.createLinearGradient(-r, -r, r, r);
+      rimGrad.addColorStop(0, isLit ? '#FFFFFF' : '#d2dade');
+      rimGrad.addColorStop(0.5, isLit ? '#FFF59D' : '#889299');
+      rimGrad.addColorStop(1, isLit ? '#FFE082' : '#454c52');
+      ctx.fillStyle = rimGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 1.06, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Lug Bolts around Rim
+      const numBolts = 6;
+      ctx.fillStyle = '#E8ECEE';
+      ctx.strokeStyle = '#222';
+      ctx.lineWidth = 1;
+      for (let b = 0; b < numBolts; b++) {
+        const ang = (b / numBolts) * Math.PI * 2;
+        const bx = Math.cos(ang) * (r * 1.01);
+        const by = Math.sin(ang) * (r * 1.01);
+        ctx.beginPath();
+        ctx.arc(bx, by, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      // Drum Head Skin (Warm Parchment Radial)
+      const skinGrad = ctx.createRadialGradient(0, 0, r * 0.1, 0, 0, r * 0.94);
+      if (isLit) {
+        skinGrad.addColorStop(0, '#FFFFFF');
+        skinGrad.addColorStop(0.6, '#FFF8E1');
+        skinGrad.addColorStop(1, '#FFE082');
+      } else {
+        skinGrad.addColorStop(0, '#e5ded1');
+        skinGrad.addColorStop(0.65, '#d4cbb8');
+        skinGrad.addColorStop(1, '#b8ad96');
+      }
+      ctx.fillStyle = skinGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.94, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Colored Accent Arc Ring (Olive / Terracotta / Cyan)
+      ctx.strokeStyle = isLit ? '#FFFFFF' : hoverVal > 0 ? '#00E5FF' : drum.ring;
+      ctx.lineWidth = r * 0.18;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.62, Math.PI * 0.25, Math.PI * 1.75);
+      ctx.stroke();
+
+      // Label Text
+      ctx.fillStyle = isLit ? '#000000' : '#22282C';
+      ctx.font = `700 ${Math.max(10, Math.round(r * 0.24))}px "Bebas Neue", sans-serif`;
+      ctx.letterSpacing = '1.5px';
+      ctx.textAlign = 'center';
+      ctx.fillText(drum.label, 0, r * 0.68);
+      ctx.restore();
+    }
+  });
+  ctx.restore();
 }
 
+// ═══════════════════════════════════════════════
+// AR XYLOPHONE OVERLAY
+// ═══════════════════════════════════════════════
+function drawARXylophoneOverlay(ctx, W, H) {
+  const padX = W * 0.04;
+  const keyboardW = W - padX * 2;
+  const topY = H * 0.45;
+  const bottomY = H * 0.93;
+  const barW = keyboardW / XYLOPHONE.length;
+  const now = performance.now();
+
+  ctx.save();
+  XYLOPHONE.forEach((k, i) => {
+    const x = padX + i * barW;
+    const barH = (bottomY - topY) * (1 - i * 0.04);
+    const y = bottomY - barH;
+    const isLit = keyHitStates[k.id] && (now - keyHitStates[k.id] < 180);
+    const hoverVal = hoveredKeys[k.id] || 0;
+
+    const colors = ['#e63946', '#f4862e', '#f6c90e', '#2ec25c', '#1fa6c9', '#3654d1', '#8e3bc4'];
+    ctx.fillStyle = isLit ? '#FFFFFF' : colors[i % colors.length];
+    ctx.globalAlpha = isLit ? 1.0 : (0.75 + hoverVal * 0.25);
+    ctx.fillRect(x + 3, y, barW - 6, barH);
+    ctx.globalAlpha = 1.0;
+
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = isLit ? 2 : 1;
+    ctx.strokeRect(x + 3, y, barW - 6, barH);
+
+    ctx.fillStyle = isLit ? '#000000' : '#FFFFFF';
+    ctx.font = '700 12px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(k.label, x + barW / 2, bottomY - 14);
+  });
+  ctx.restore();
+}
+
+// ═══════════════════════════════════════════════
+// AR SHOCKWAVE RIPPLES
+// ═══════════════════════════════════════════════
+function drawARRipples(ctx) {
+  for (let i = arHitRipples.length - 1; i >= 0; i--) {
+    const r = arHitRipples[i];
+    ctx.save();
+    ctx.strokeStyle = r.color;
+    ctx.globalAlpha = r.alpha;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    r.radius += 3.6;
+    r.alpha *= 0.88;
+    if (r.alpha < 0.04 || r.radius >= r.maxRadius) {
+      arHitRipples.splice(i, 1);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════
+// FUTURISTIC CYBER SKELETON GLOVE HAND TRACKING
+// ═══════════════════════════════════════════════
 function drawHand(ctx, lms, label, W, H) {
   const isR = label === 'Right';
   const glow = isR ? glowR : glowL;
-  const rgb = glow > 0.3 ? '0,170,255' : '0,255,102';
+  const rgb = isR ? '245, 255, 0' : '0, 229, 255';
+  const hex = isR ? '#F5FF00' : '#00E5FF';
 
-  const [tipX, tipY] = [(1 - lms[8].x) * W, lms[8].y * H];
-  ctx.beginPath();
-  ctx.arc(tipX, tipY, 11, 0, Math.PI*2);
-  ctx.fillStyle = `rgba(${rgb},0.96)`;
-  ctx.fill();
-  ctx.strokeStyle = `rgba(${rgb},0.75)`;
-  ctx.lineWidth = 3;
-  ctx.stroke();
+  const pts = lms.map(lm => ({
+    x: (1 - lm.x) * W,
+    y: lm.y * H,
+    z: lm.z
+  }));
 
-  const [knuckleX, knuckleY] = [(1 - lms[5].x) * W, lms[5].y * H];
+  ctx.save();
+
+  // 1. Translucent Palm Energy Mesh
+  const palmIndices = [0, 1, 5, 9, 13, 17];
   ctx.beginPath();
-  ctx.arc(knuckleX, knuckleY, 7, 0, Math.PI*2);
-  ctx.fillStyle = `rgba(${rgb},0.8)`;
+  ctx.moveTo(pts[palmIndices[0]].x, pts[palmIndices[0]].y);
+  for (let p = 1; p < palmIndices.length; p++) {
+    ctx.lineTo(pts[palmIndices[p]].x, pts[palmIndices[p]].y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = `rgba(${rgb}, ${0.08 + glow * 0.15})`;
   ctx.fill();
+
+  // 2. Glowing Holographic Segmented Bone Lines
+  SKELETON_BONES.forEach(([a, b]) => {
+    const p1 = pts[a], p2 = pts[b];
+
+    // Outer Neon Aura
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = `rgba(${rgb}, ${0.28 + glow * 0.4})`;
+    ctx.lineWidth = 6;
+    ctx.stroke();
+
+    // Laser Core
+    ctx.strokeStyle = `rgba(${rgb}, 0.95)`;
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+
+    // Intense White Center Highlight
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+    ctx.lineWidth = 0.9;
+    ctx.stroke();
+  });
+
+  // 3. Cyber Joint Nodes (All landmarks except tips)
+  for (let i = 0; i < pts.length; i++) {
+    if (FINGER_LANDMARKS.includes(i)) continue; // Handled separately below
+    const pt = pts[i];
+    const isWrist = (i === 0);
+    const rOuter = isWrist ? 7 : 4;
+    const rInner = isWrist ? 3.5 : 1.8;
+
+    // Outer Cyber Ring
+    ctx.beginPath();
+    ctx.arc(pt.x, pt.y, rOuter, 0, Math.PI * 2);
+    ctx.strokeStyle = hex;
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+
+    // Inner Core Dot
+    ctx.beginPath();
+    ctx.arc(pt.x, pt.y, rInner, 0, Math.PI * 2);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fill();
+  }
+
+  // 4. Interactive Fingertip Contact Styluses & Reticles (Landmarks 4, 8, 12, 16, 20)
+  FINGER_LANDMARKS.forEach(fIdx => {
+    const tip = pts[fIdx];
+    const fState = multiFingerState[isR ? 'right' : 'left'][fIdx];
+    const isStriking = fState && fState.velocity > (gestureThreshold * H * 0.12);
+    const reticleR = isStriking ? 15 : 11;
+
+    // Outer Target Reticle
+    ctx.beginPath();
+    ctx.arc(tip.x, tip.y, reticleR, 0, Math.PI * 2);
+    ctx.strokeStyle = isStriking ? '#FFFFFF' : hex;
+    ctx.lineWidth = isStriking ? 2.5 : 1.5;
+    ctx.stroke();
+
+    // 4 Crosshair Tick Marks
+    const tickLen = 4;
+    ctx.strokeStyle = hex;
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(tip.x - reticleR - tickLen, tip.y); ctx.lineTo(tip.x - reticleR, tip.y);
+    ctx.moveTo(tip.x + reticleR, tip.y); ctx.lineTo(tip.x + reticleR + tickLen, tip.y);
+    ctx.moveTo(tip.x, tip.y - reticleR - tickLen); ctx.lineTo(tip.x, tip.y - reticleR);
+    ctx.moveTo(tip.x, tip.y + reticleR); ctx.lineTo(tip.x, tip.y + reticleR + tickLen);
+    ctx.stroke();
+
+    // Inner Glowing Core
+    ctx.beginPath();
+    ctx.arc(tip.x, tip.y, 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = isStriking ? '#FFFFFF' : `rgba(${rgb}, 0.95)`;
+    ctx.fill();
+  });
+
+  ctx.restore();
 }
 
 function markHandMissing(handLabel) {
@@ -1182,6 +1868,12 @@ function markHandMissing(handLabel) {
   if (st.missingSince === null) st.missingSince = now;
   if (now - st.missingSince > HAND_GRACE_MS) {
     st.armed = true;
+    FINGER_LANDMARKS.forEach(f => {
+      if (multiFingerState[handLabel][f]) {
+        multiFingerState[handLabel][f].armed = true;
+        multiFingerState[handLabel][f].targetId = null;
+      }
+    });
   }
 }
 
@@ -1214,130 +1906,214 @@ function showZone(name) {
   setTimeout(() => lbl.classList.remove('show'), 380);
 }
 
+// ═══════════════════════════════════════════════
+// TRUE POLYPHONIC PARALLEL MULTI-FINGER TRACKING
+// ═══════════════════════════════════════════════
 function processHands(results) {
   if (!running || isCalibrating) return;
   const lms = results.multiHandLandmarks || [];
   const hdns = results.multiHandedness || [];
   batchUpdate.handCount = lms.length;
-  
+
   if (lms.length === 0) {
     batchUpdate.motionState = 'idle';
     markHandMissing('right');
     markHandMissing('left');
+    hoveredKeys = {};
+    hoveredDrums = {};
     return;
   }
 
   batchUpdate.motionState = 'detecting';
-  const avgConf = hdns.reduce((s,h) => s + h.score, 0) / hdns.length;
+  const avgConf = hdns.reduce((s, h) => s + h.score, 0) / hdns.length;
   document.getElementById('f-conf').textContent = Math.round(avgConf * 100) + '%';
 
-  let R = null, L = null;
-  lms.forEach((l, i) => {
-    if (hdns[i].label === 'Right') { R = l; handState.right.confidence = hdns[i].score; }
-    else { L = l; handState.left.confidence = hdns[i].score; }
+  const canvas = document.getElementById('draw-canvas');
+  const W = canvas.width, H = canvas.height;
+  const now = performance.now();
+
+  // Reset hover frames
+  hoveredKeys = {};
+  hoveredDrums = {};
+
+  const handsData = [];
+  lms.forEach((landmarks, i) => {
+    const rawLabel = hdns[i] ? hdns[i].label : 'Right';
+    const handLabel = rawLabel === 'Right' ? 'right' : 'left';
+    handsData.push({ landmarks, handLabel, score: hdns[i] ? hdns[i].score : 1 });
   });
 
-  if (R) {
-    handState.right.depth = R[8].z;
-    glowR = Math.min(1, glowR + 0.4);
-    handState.right.missingSince = null;
-  } else {
-    markHandMissing('right');
-  }
-  if (L) {
-    handState.left.depth = L[8].z;
-    glowL = Math.min(1, glowL + 0.4);
-    handState.left.missingSince = null;
-  } else {
-    markHandMissing('left');
-  }
+  handsData.forEach(({ landmarks, handLabel }) => {
+    handState[handLabel].missingSince = null;
+    handState[handLabel].depth = landmarks[8].z;
 
-  const keys = currentInst === 'piano' ? getPianoSet().filter(k => k.color === 'white') : getXylophoneSet();
-  if (currentInst === 'drums') {
-    if (R) processGesture(R, 'right', DRUMS_RIGHT.length, fireDrumZone, [0.5, 1]);
-    if (L) processGesture(L, 'left', DRUMS_LEFT.length, fireDrumZone, [0, 0.5]);
-  } else {
-    if (R) processGesture(R, 'right', keys.length, fireKeyZone);
-    if (L) processGesture(L, 'left', keys.length, fireKeyZone);
-  }
-}
-
-function fireDrumZone(zone, handLabel) {
-  const pad = handLabel === 'left' ? DRUMS_LEFT[zone] : DRUMS_RIGHT[zone];
-  if (!canFire(`dr_${handLabel}_${zone}`)) return;
-  
-  const st = handState[handLabel];
-  let vel = Math.min(1.6, st.velocity);
-  if (st.depth < -0.1) vel = Math.min(1.9, vel * 1.45);
-  if (st.depth < -0.2) vel = Math.min(1.9, vel * 1.9);
-  
-  if (pad.type === 'kick') playKick(vel);
-  else if (pad.type === 'snare') playSnare(vel);
-  else if (pad.type === 'tom') playTom(vel, 'high');
-  else if (pad.type === 'tom-mid') playTom(vel, 'mid');
-  
-  onHit(pad.label, pad.id, vel);
-  if (handLabel === 'right') glowR = 1;
-  else glowL = 1;
-}
-
-function fireKeyZone(zone, handLabel) {
-  const keys = currentInst === 'piano' ? getPianoSet().filter(k => k.color === 'white') : getXylophoneSet();
-  const key = keys[zone];
-  if (!canFire(`pk_${handLabel}_${zone}`)) return;
-  
-  const st = handState[handLabel];
-  let vel = Math.min(1.6, st.velocity);
-  if (st.depth < -0.1) vel = Math.min(1.5, vel * 1.25);
-  
-  if (currentInst === 'xylophone') playXylophone(key.freq, vel);
-  else playNote(key.freq, 0.7, vel);
-  
-  onHit(key.label, key.id, vel);
-  if (handLabel === 'right') glowR = 1;
-  else glowL = 1;
-}
-
-function processGesture(hand, handLabel, zoneCount, fireFn, xRange) {
-  const tip = hand[8], base = hand[5];
-  const st = handState[handLabel];
-  const currY = tip.y;
-  const deltaY = st.prevY !== null ? (currY - st.prevY) : 0;
-  const velocity = Math.abs(deltaY) * 11;
-  const isDownward = deltaY > 0.007;
-  
-  st.velocity = velocity;
-  
-  const inZone = tip.y > base.y + 0.009 && isDownward && velocity > gestureThreshold;
-  const mx = 1 - tip.x;
-
-  let idx, inRange = true;
-  if (xRange) {
-    const [lo, hi] = xRange;
-    inRange = mx >= lo && mx < hi;
-    const local = (mx - lo) / (hi - lo);
-    idx = Math.floor(local * zoneCount);
-  } else {
-    idx = Math.floor(mx * zoneCount);
-  }
-  idx = Math.max(0, Math.min(zoneCount - 1, idx));
-
-  const zoneActive = inZone && inRange;
-
-  if (zoneActive) {
-    if (st.armed) {
-      fireFn(idx, handLabel);
-      st.armed = false;
-      st.zone = idx;
-    } else if (idx !== st.zone) {
-      fireFn(idx, handLabel);
-      st.zone = idx;
+    if (currentInst === 'piano') {
+      processPianoMultiFinger(landmarks, handLabel, W, H, now);
+    } else if (currentInst === 'drums') {
+      processDrumsMultiFinger(landmarks, handLabel, W, H, now);
+    } else if (currentInst === 'xylophone') {
+      processXylophoneMultiFinger(landmarks, handLabel, W, H, now);
     }
-  } else {
-    st.armed = true;
-  }
+  });
+}
 
-  st.prevY = currY;
+function processPianoMultiFinger(landmarks, handLabel, W, H, now) {
+  const geom = getARPianoGeometry(W, H);
+  const fStateMap = multiFingerState[handLabel];
+  const velThreshold = Math.max(3.2, gestureThreshold * H * 0.13);
+
+  FINGER_LANDMARKS.forEach(fIdx => {
+    const lm = landmarks[fIdx];
+    const tipX = (1 - lm.x) * W;
+    const tipY = lm.y * H;
+    const fSt = fStateMap[fIdx];
+
+    const deltaY = fSt.prevY !== null ? (tipY - fSt.prevY) : 0;
+    fSt.velocity = Math.max(0, deltaY);
+    const isDownward = deltaY > velThreshold;
+
+    // Check Key Hover (Black keys checked first for priority)
+    let targetedKey = geom.blackBoxes.find(b => tipX >= b.x1 && tipX <= b.x2 && tipY >= b.y1 && tipY <= b.y2);
+    if (!targetedKey) {
+      targetedKey = geom.whiteBoxes.find(w => tipX >= w.x1 && tipX <= w.x2 && tipY >= w.y1 && tipY <= w.y2);
+    }
+
+    // Hover guidance aura
+    if (targetedKey) {
+      hoveredKeys[targetedKey.id] = Math.max(hoveredKeys[targetedKey.id] || 0, 0.85);
+    } else if (tipY >= geom.topY - H * 0.12 && tipY <= geom.topY) {
+      // Just above keybed
+      const nearWhite = geom.whiteBoxes.find(w => tipX >= w.x1 && tipX <= w.x2);
+      if (nearWhite) hoveredKeys[nearWhite.id] = Math.max(hoveredKeys[nearWhite.id] || 0, 0.35);
+    }
+
+    // Polyphonic Strike Detection
+    if (targetedKey && isDownward && tipY >= geom.topY + 12) {
+      if (fSt.armed && canFire(`pk_${targetedKey.id}_${handLabel}_${fIdx}`)) {
+        firePianoKey(targetedKey, fSt.velocity / 12, handLabel, tipX, tipY);
+        fSt.armed = false;
+        fSt.targetId = targetedKey.id;
+      } else if (fSt.targetId !== targetedKey.id && canFire(`pk_${targetedKey.id}_${handLabel}_${fIdx}`)) {
+        firePianoKey(targetedKey, fSt.velocity / 12, handLabel, tipX, tipY);
+        fSt.targetId = targetedKey.id;
+      }
+    } else if (!isDownward || deltaY < -2 || tipY < geom.topY - 8) {
+      fSt.armed = true;
+      fSt.targetId = null;
+    }
+
+    fSt.prevY = tipY;
+  });
+}
+
+function firePianoKey(key, velocity, handLabel, x, y) {
+  const vel = Math.min(1.5, Math.max(0.4, velocity));
+  playNote(key.freq, 0.85, vel);
+  keyHitStates[key.id] = performance.now();
+
+  arHitRipples.push({
+    x, y,
+    radius: 12,
+    maxRadius: 65,
+    color: key.color === 'white' ? '#00E5FF' : '#F5FF00',
+    alpha: 1.0
+  });
+
+  if (handLabel === 'right') glowR = 1; else glowL = 1;
+  onHit(key.label, key.id, vel);
+}
+
+function processDrumsMultiFinger(landmarks, handLabel, W, H, now) {
+  const minDim = Math.min(W, H);
+  const fStateMap = multiFingerState[handLabel];
+  const velThreshold = Math.max(3.0, gestureThreshold * H * 0.12);
+
+  FINGER_LANDMARKS.forEach(fIdx => {
+    const lm = landmarks[fIdx];
+    const tipX = (1 - lm.x) * W;
+    const tipY = lm.y * H;
+    const fSt = fStateMap[fIdx];
+
+    const deltaY = fSt.prevY !== null ? (tipY - fSt.prevY) : 0;
+    fSt.velocity = Math.max(0, deltaY);
+    const isDownward = deltaY > velThreshold;
+
+    // Find drum under this finger
+    let targetDrum = null;
+    for (const d of DRUM_KIT) {
+      const dist = Math.hypot(tipX - d.cx * W, tipY - d.cy * H);
+      if (dist <= d.r * minDim) {
+        targetDrum = d;
+        hoveredDrums[d.id] = Math.max(hoveredDrums[d.id] || 0, 0.85);
+        break;
+      }
+    }
+
+    // Polyphonic Drum Strike
+    if (targetDrum && isDownward) {
+      if (fSt.armed && canFire(`dr_${targetDrum.id}_${handLabel}_${fIdx}`)) {
+        triggerDrumHit(targetDrum.id, Math.min(1.6, fSt.velocity / 10), tipX, tipY);
+        fSt.armed = false;
+        fSt.targetId = targetDrum.id;
+        if (handLabel === 'right') glowR = 1; else glowL = 1;
+      } else if (fSt.targetId !== targetDrum.id && canFire(`dr_${targetDrum.id}_${handLabel}_${fIdx}`)) {
+        triggerDrumHit(targetDrum.id, Math.min(1.6, fSt.velocity / 10), tipX, tipY);
+        fSt.targetId = targetDrum.id;
+        if (handLabel === 'right') glowR = 1; else glowL = 1;
+      }
+    } else if (!isDownward || deltaY < -2) {
+      fSt.armed = true;
+      fSt.targetId = null;
+    }
+
+    fSt.prevY = tipY;
+  });
+}
+
+function processXylophoneMultiFinger(landmarks, handLabel, W, H, now) {
+  const padX = W * 0.04;
+  const keyboardW = W - padX * 2;
+  const topY = H * 0.45;
+  const bottomY = H * 0.93;
+  const barW = keyboardW / XYLOPHONE.length;
+  const fStateMap = multiFingerState[handLabel];
+  const velThreshold = Math.max(3.2, gestureThreshold * H * 0.13);
+
+  FINGER_LANDMARKS.forEach(fIdx => {
+    const lm = landmarks[fIdx];
+    const tipX = (1 - lm.x) * W;
+    const tipY = lm.y * H;
+    const fSt = fStateMap[fIdx];
+
+    const deltaY = fSt.prevY !== null ? (tipY - fSt.prevY) : 0;
+    fSt.velocity = Math.max(0, deltaY);
+    const isDownward = deltaY > velThreshold;
+
+    let targetKey = null;
+    if (tipY >= topY && tipY <= bottomY && tipX >= padX && tipX <= padX + keyboardW) {
+      const idx = Math.floor((tipX - padX) / barW);
+      if (idx >= 0 && idx < XYLOPHONE.length) {
+        targetKey = XYLOPHONE[idx];
+        hoveredKeys[targetKey.id] = 1;
+      }
+    }
+
+    if (targetKey && isDownward) {
+      if (fSt.armed && canFire(`xy_${targetKey.id}_${handLabel}_${fIdx}`)) {
+        playXylophone(targetKey.freq, 1);
+        keyHitStates[targetKey.id] = now;
+        arHitRipples.push({ x: tipX, y: tipY, radius: 12, maxRadius: 60, color: '#FFFFFF', alpha: 1.0 });
+        onHit(targetKey.label, targetKey.id, 1);
+        fSt.armed = false;
+        fSt.targetId = targetKey.id;
+      }
+    } else if (!isDownward || deltaY < -2) {
+      fSt.armed = true;
+      fSt.targetId = null;
+    }
+
+    fSt.prevY = tipY;
+  });
 }
 
 function onHit(name, padId, velocity=1) {
@@ -1346,7 +2122,8 @@ function onHit(name, padId, velocity=1) {
   document.getElementById('bn').classList.add('flash');
   setTimeout(() => document.getElementById('bn').classList.remove('flash'), 140);
 
-  document.getElementById('f-lat').textContent = (2 + Math.floor(Math.random()*12)) + 'ms';
+  document.getElementById('f-lat').textContent = actualLatencyMs + 'ms';
+  document.getElementById('cpu-usage').textContent = cpuUsagePct + '%';
 
   const el = document.getElementById('pad-' + padId) || document.getElementById('pk-' + padId);
   if (el) {
@@ -1357,13 +2134,18 @@ function onHit(name, padId, velocity=1) {
   showZone(name);
   document.getElementById('flash').style.opacity = '0.04';
   setTimeout(() => document.getElementById('flash').style.opacity = '0', 70);
-  addLog('[HIT] ' + name + ' ' + Math.round(velocity*100) + '%', 'hit');
+  addLog('[HIT] ' + name + ' ' + Math.round(velocity * 100) + '%', 'hit');
 }
 
 function drawWaveform() {
-  requestAnimationFrame(drawWaveform);
+  waveformFrameId = requestAnimationFrame(drawWaveform);
+  const now = performance.now();
+  if (now - lastWaveformAt < 33) return;
+  lastWaveformAt = now;
   const canvas = document.getElementById('wf-canvas');
-  canvas.width = canvas.clientWidth || 200;
+  const width = canvas.clientWidth || 200;
+  if (canvas.width !== width) canvas.width = width;
+  if (canvas.height !== 45) canvas.height = 45;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = 45;
   ctx.fillStyle = '#000';
@@ -1379,13 +2161,15 @@ function drawWaveform() {
     return;
   }
 
-  const buf = new Uint8Array(analyser.frequencyBinCount);
-  analyser.getByteTimeDomainData(buf);
+  if (!waveformData || waveformData.length !== analyser.frequencyBinCount) {
+    waveformData = new Uint8Array(analyser.frequencyBinCount);
+  }
+  analyser.getByteTimeDomainData(waveformData);
   ctx.strokeStyle = '#F5FF00';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  buf.forEach((v, i) => {
-    const x = (i / buf.length) * W;
+  waveformData.forEach((v, i) => {
+    const x = (i / waveformData.length) * W;
     const y = (v / 255) * H;
     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   });
@@ -1402,18 +2186,20 @@ function updateRecordTime() {
 setInterval(updateRecordTime, 200);
 
 function startCalibration() {
+  if (calibrationTimer !== null) clearInterval(calibrationTimer);
   isCalibrating = true;
   calibrationTime = 0;
   document.getElementById('cal-screen').classList.add('show');
   addLog('[SYS] CALIBRATING...', 'sys');
 
-  const cal = setInterval(() => {
+  calibrationTimer = setInterval(() => {
     calibrationTime += 100;
     const progress = (calibrationTime / CALIBRATION_DURATION) * 100;
     document.getElementById('cal-bar').style.width = progress + '%';
 
     if (calibrationTime >= CALIBRATION_DURATION) {
-      clearInterval(cal);
+      clearInterval(calibrationTimer);
+      calibrationTimer = null;
       document.getElementById('cal-screen').classList.remove('show');
       isCalibrating = false;
       addLog('[SYS] READY ✓', 'sys');
@@ -1452,18 +2238,60 @@ function setControlState(state) {
 function togglePause() {
   if (!running) return;
   paused = !paused;
+  if (paused) {
+    if (cameraFrameId !== null) cancelAnimationFrame(cameraFrameId);
+    cameraFrameId = null;
+    if (waveformFrameId !== null) cancelAnimationFrame(waveformFrameId);
+    waveformFrameId = null;
+  } else {
+    lastInferenceAt = 0;
+    if (cameraFrameCallback && !frameInFlight) cameraFrameId = requestAnimationFrame(cameraFrameCallback);
+    if (waveformFrameId === null) drawWaveform();
+  }
   setControlState(paused ? 'paused' : 'running');
   document.getElementById('pause-overlay').classList.toggle('show', paused);
   addLog('[SYS] ' + (paused ? 'PAUSED' : 'RESUMED'), 'sys');
 }
 
 function stopSystem() {
-  if (mpCam) { mpCam.stop(); mpCam = null; }
-  if (sharedStream) { sharedStream.getTracks().forEach(t => t.stop()); sharedStream = null; }
   running = false;
   paused = false;
   isCalibrating = false;
+  cameraRunId++;
   recordStartTime = 0;
+  systemStarting = false;
+  frameInFlight = false;
+  lastInferenceAt = 0;
+  if (cameraFrameId !== null) cancelAnimationFrame(cameraFrameId);
+  cameraFrameId = null;
+  cameraFrameCallback = null;
+  if (calibrationTimer !== null) clearInterval(calibrationTimer);
+  calibrationTimer = null;
+  calibrationTime = 0;
+  document.getElementById('cal-screen').classList.remove('show');
+  if (waveformFrameId !== null) cancelAnimationFrame(waveformFrameId);
+  waveformFrameId = null;
+  if (handsInstance) {
+    handsInstance.close().catch(() => {});
+    handsInstance = null;
+  }
+  if (sharedStream) {
+    sharedStream.getTracks().forEach(track => track.stop());
+    sharedStream = null;
+  }
+  const video = document.getElementById('webcam');
+  video.pause();
+  video.srcObject = null;
+  permissionGranted = false;
+  if (audioCtx && audioCtx.state !== 'closed') audioCtx.close().catch(() => {});
+  audioCtx = null;
+  masterGain = null;
+  analyser = null;
+  compressor = null;
+  waveformData = null;
+  activeVoices = 0;
+  voiceQueue.length = 0;
+  document.getElementById('f-voices').textContent = '00';
 
   document.getElementById('dot-cam').className = 'dot off';
   document.getElementById('lbl-cam').textContent = 'OFF';
@@ -1494,8 +2322,36 @@ document.addEventListener('keydown', (e) => {
     if (running && !paused) togglePause();
     else if (!running) launchSystem();
     else togglePause();
+    return;
   }
-  else if (e.code === 'KeyP' && !e.shiftKey) {
+  
+  if (running && currentInst === 'drums' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+    const drumKeys = {
+      'KeyQ': 'crash', 'KeyW': 'splash', 'KeyE': 'ride',
+      'KeyA': 'tom1',  'KeyS': 'tom2',   'KeyD': 'snare',
+      'KeyZ': 'closed_hat', 'KeyC': 'open_hat', 'KeyX': 'floor_tom', 'KeyB': 'bass'
+    };
+    if (drumKeys[e.code]) {
+      e.preventDefault();
+      triggerDrumHit(drumKeys[e.code], 1);
+      return;
+    }
+  }
+
+  if (running && currentInst === 'piano' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+    const pianoKeyMap = {
+      'Digit1': 'C4', 'Digit2': 'D4', 'Digit3': 'E4', 'Digit4': 'F4',
+      'Digit5': 'G4', 'Digit6': 'A4', 'Digit7': 'B4', 'Digit8': 'C5'
+    };
+    if (pianoKeyMap[e.code]) {
+      e.preventDefault();
+      const k = PIANO.find(item => item.id === pianoKeyMap[e.code]);
+      if (k) firePianoKey(k, 1, 'right', window.innerWidth * 0.5, window.innerHeight * 0.7);
+      return;
+    }
+  }
+
+  if (e.code === 'KeyP' && !e.shiftKey) {
     if (!running) return;
     e.preventDefault();
     togglePause();
@@ -1530,7 +2386,11 @@ function toggleShortcutsHint() {
 
 document.addEventListener('mousemove', () => {
   document.getElementById('kb-hint').classList.add('show');
-  setTimeout(() => { if (!showShortcuts) document.getElementById('kb-hint').classList.remove('show'); }, 3000);
+  if (keyboardHintTimer !== null) clearTimeout(keyboardHintTimer);
+  keyboardHintTimer = setTimeout(() => {
+    if (!showShortcuts) document.getElementById('kb-hint').classList.remove('show');
+    keyboardHintTimer = null;
+  }, 3000);
 });
 
 document.querySelectorAll('.inst-btn[data-inst]').forEach(button => {
@@ -1538,47 +2398,72 @@ document.querySelectorAll('.inst-btn[data-inst]').forEach(button => {
 });
 
 async function doRequestCamera() {
+  if (cameraRequestPending || running) return;
   if (permissionGranted && sharedStream) {
-    launchSystem();
+    await launchSystem();
     return;
   }
 
-  document.getElementById('perm-btn').disabled = true;
-  document.getElementById('perm-btn').textContent = 'REQUESTING...';
+  const button = document.getElementById('perm-btn');
+  const video = document.getElementById('webcam');
+  cameraRequestPending = true;
+  button.disabled = true;
+  button.textContent = 'REQUESTING...';
 
   try {
     sharedStream = await navigator.mediaDevices.getUserMedia({
-      video: { width: 640, height: 480, facingMode: 'user' },
+      video: {
+        width: { ideal: 640, max: 640 },
+        height: { ideal: 480, max: 480 },
+        frameRate: { ideal: 24, max: 24 },
+        facingMode: 'user'
+      },
       audio: false
     });
-    document.getElementById('webcam').srcObject = sharedStream;
-    await document.getElementById('webcam').play().catch(() => {});
+    video.srcObject = sharedStream;
+    await video.play();
 
     permissionGranted = true;
-    document.getElementById('perm-btn').textContent = 'LAUNCHING...';
+    button.textContent = 'LAUNCHING...';
     addLog('[SYS] CAMERA AUTHORIZED ✓', 'sys');
-    setTimeout(() => launchSystem(), 250);
+    await launchSystem();
   } catch(err) {
-    document.getElementById('perm-btn').disabled = false;
-    document.getElementById('perm-btn').textContent = '📷 RETRY';
+    if (sharedStream) sharedStream.getTracks().forEach(track => track.stop());
+    sharedStream = null;
+    video.pause();
+    video.srcObject = null;
+    permissionGranted = false;
+    button.disabled = false;
+    button.textContent = '📷 RETRY';
     addLog('[ERR] ' + err.name, 'err');
+  } finally {
+    cameraRequestPending = false;
   }
 }
 
 async function launchSystem() {
-  if (running || !currentInst) return;
+  if (running || systemStarting || !currentInst) return;
+  if (!sharedStream) {
+    await doRequestCamera();
+    return;
+  }
 
+  systemStarting = true;
+  const runId = ++cameraRunId;
   addLog('[SYS] INITIALIZING...', 'sys');
-  initAudio();
-  recordStartTime = Date.now();
-  drawWaveform();
-  resizeCanvas();
 
   try {
-    handsInstance = new Hands({
+    if (!audioCtx || audioCtx.state === 'closed') initAudio();
+    if (audioCtx.state === 'suspended') await audioCtx.resume();
+    if (waveformFrameId === null) drawWaveform();
+    recordStartTime = Date.now();
+    resizeCanvas();
+
+    const tracker = new Hands({
       locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}`
     });
-    handsInstance.setOptions({
+    handsInstance = tracker;
+    tracker.setOptions({
       maxNumHands: 2,
       modelComplexity: 0,
       minDetectionConfidence: 0.65,
@@ -1586,25 +2471,12 @@ async function launchSystem() {
     });
 
     let latestHandResults = null;
-    handsInstance.onResults(res => {
+    tracker.onResults(res => {
       latestHandResults = res;
     });
 
     addLog('[SYS] STARTING CAMERA...', 'sys');
-
-    mpCam = new Camera(document.getElementById('webcam'), {
-      onFrame: async () => {
-        if (paused) return;
-        await handsInstance.send({ image: document.getElementById('webcam') });
-        drawFrame(latestHandResults);
-        if (latestHandResults) processHands(latestHandResults);
-        flushBatchUpdate();
-      },
-      width: 640,
-      height: 480
-    });
-
-    await mpCam.start();
+    const video = document.getElementById('webcam');
     document.getElementById('dot-cam').className = 'dot on';
     document.getElementById('lbl-cam').textContent = 'ON';
     document.getElementById('cam-placeholder').classList.add('gone');
@@ -1619,9 +2491,59 @@ async function launchSystem() {
     updateSwitchButtons();
     startCalibration();
 
+    const processCameraFrame = async timestamp => {
+      if (!running || runId !== cameraRunId) return;
+      if (paused) {
+        cameraFrameId = null;
+        return;
+      }
+      if (!sharedStream || !sharedStream.active) {
+        addLog('[ERR] CAMERA STREAM ENDED', 'err');
+        stopSystem();
+        return;
+      }
+      if (video.readyState < 2 || frameInFlight || timestamp - lastInferenceAt < 1000 / 24) {
+        cameraFrameId = requestAnimationFrame(processCameraFrame);
+        return;
+      }
+
+      frameInFlight = true;
+      lastInferenceAt = timestamp;
+      const inferStart = performance.now();
+      try {
+        await tracker.send({ image: video });
+        const inferDuration = performance.now() - inferStart;
+        actualLatencyMs = Math.max(4, Math.round(inferDuration));
+        cpuUsagePct = Math.min(99, Math.round((inferDuration / (1000 / 24)) * 100));
+
+        if (running && runId === cameraRunId && !paused) {
+          drawFrame(latestHandResults);
+          if (latestHandResults) processHands(latestHandResults);
+          flushBatchUpdate();
+        }
+      } catch(err) {
+        if (runId === cameraRunId) {
+          addLog('[ERR] HAND TRACKING: ' + err.message, 'err');
+          stopSystem();
+        }
+        return;
+      } finally {
+        if (runId === cameraRunId) frameInFlight = false;
+      }
+
+      if (running && runId === cameraRunId && !paused) cameraFrameId = requestAnimationFrame(processCameraFrame);
+    };
+    systemStarting = false;
+    cameraFrameCallback = processCameraFrame;
+    cameraFrameId = requestAnimationFrame(processCameraFrame);
+
   } catch(err) {
-    addLog('[ERR] ' + err.message, 'err');
+    stopSystem();
     document.getElementById('perm-btn').disabled = false;
+    document.getElementById('perm-btn').textContent = '📷 RETRY';
+    addLog('[ERR] ' + err.message, 'err');
+  } finally {
+    systemStarting = false;
   }
 }
 
@@ -1629,17 +2551,8 @@ function syncPrivacyToggle(checked) {
   privacyMode = checked;
 }
 
-document.getElementById('layout-mode-btn').addEventListener('click', () => {
-  const btn = document.getElementById('layout-mode-btn');
-  if (!btn) return;
-  if (btn.textContent.includes('LONG')) {
-    toggleExtendedKeys();
-  } else {
-    toggleLayoutMode();
-  }
-});
+document.getElementById('layout-mode-btn').addEventListener('click', toggleLayoutMode);
 
-drawWaveform();
 setSensitivity(gestureThreshold);
 </script>
 </body>
