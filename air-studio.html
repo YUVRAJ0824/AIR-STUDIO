@@ -728,25 +728,32 @@ function noiseBuf(dur) {
   return buf;
 }
 
-function claimVoice(stopFn) {
+function claimVoice(stopFn, nodes=[]) {
   if (activeVoices >= MAX_VOICES) {
     const oldest = voiceQueue.shift();
     if (oldest) {
       try { oldest.stopFn(); } catch(e) {}
+      if (oldest.nodes) {
+        oldest.nodes.forEach(n => { try { n.disconnect(); } catch(e) {} });
+      }
       activeVoices--;
     }
   }
   activeVoices++;
-  const entry = { stopFn };
+  const entry = { stopFn, nodes };
   voiceQueue.push(entry);
   return entry;
 }
 
 function releaseVoice(entry) {
+  if (entry && entry.nodes) {
+    entry.nodes.forEach(n => { try { n.disconnect(); } catch(e) {} });
+  }
   activeVoices = Math.max(0, activeVoices - 1);
   const idx = voiceQueue.indexOf(entry);
   if (idx !== -1) voiceQueue.splice(idx, 1);
-  document.getElementById('f-voices').textContent = String(activeVoices).padStart(2, '0');
+  const voiceEl = document.getElementById('f-voices');
+  if (voiceEl) voiceEl.textContent = String(activeVoices).padStart(2, '0');
 }
 
 // DRUM & PIANO PROFESSIONAL AUDIO SYNTHESIS
@@ -774,7 +781,7 @@ function playKick(velocity=1) {
   g.gain.setValueAtTime(vol * 1.1, t);
   g.gain.exponentialRampToValueAtTime(0.001, t + 0.52);
 
-  const entry = claimVoice(() => { try { o.stop(); clickSrc.stop(); } catch(e){} });
+  const entry = claimVoice(() => { try { o.stop(); clickSrc.stop(); } catch(e){} }, [o, g, clickSrc, clickFilter, clickGain]);
   o.start(t);
   clickSrc.start(t);
   o.stop(t + 0.52);
@@ -814,7 +821,7 @@ function playSnare(velocity=1) {
   g2.gain.setValueAtTime(0.95 * vol, t);
   g2.gain.exponentialRampToValueAtTime(0.001, t + 0.30);
 
-  const entry = claimVoice(() => { try { o1.stop(); src.stop(); } catch(e){} });
+  const entry = claimVoice(() => { try { o1.stop(); src.stop(); } catch(e){} }, [o1, g1, src, hpf, bpf, g2]);
   o1.start(t);
   src.start(t);
   o1.stop(t + 0.16);
@@ -840,7 +847,7 @@ function playTom(velocity=1, pitch='high') {
   g.gain.setValueAtTime(vol, t);
   g.gain.exponentialRampToValueAtTime(0.001, t + dur);
 
-  const entry = claimVoice(() => { try { o.stop(); } catch(e){} });
+  const entry = claimVoice(() => { try { o.stop(); } catch(e){} }, [o, g]);
   o.start(t);
   o.stop(t + dur);
   o.onended = () => releaseVoice(entry);
@@ -883,7 +890,7 @@ function playHiHat(velocity=1, isOpen=false) {
 
   const entry = claimVoice(() => {
     try { oscs.forEach(o => o.stop()); stick.stop(); } catch(e){}
-  });
+  }, [...oscs, hpf, g, stick, stickFilter]);
   oscs.forEach(o => { o.start(t); o.stop(t + dur); });
   stick.start(t);
   stick.stop(t + dur);
@@ -921,7 +928,7 @@ function playCrash(velocity=1) {
 
   const entry = claimVoice(() => {
     try { noise.stop(); o1.stop(); o2.stop(); } catch(e){}
-  });
+  }, [noise, hpf, g, o1, o2]);
   noise.start(t);
   o1.start(t);
   o2.start(t);
@@ -950,7 +957,7 @@ function playSplash(velocity=1) {
   g.gain.setValueAtTime(vol * 0.9, t);
   g.gain.exponentialRampToValueAtTime(0.001, t + dur);
 
-  const entry = claimVoice(() => { try { noise.stop(); } catch(e){} });
+  const entry = claimVoice(() => { try { noise.stop(); } catch(e){} }, [noise, hpf, g]);
   noise.start(t);
   noise.stop(t + dur);
   noise.onended = () => releaseVoice(entry);
@@ -987,7 +994,7 @@ function playRide(velocity=1) {
 
   const entry = claimVoice(() => {
     try { ping.stop(); noise.stop(); } catch(e){}
-  });
+  }, [ping, pingG, noise, hpf, bodyG]);
   ping.start(t);
   noise.start(t);
   ping.stop(t + 0.38);
@@ -1070,8 +1077,7 @@ function playNote(freq, dur=0.85, velocity=1) {
   o2.connect(filter);
 
   const entry = claimVoice(() => {
-    try { o1.stop(); o2.stop(); o3.stop(); strikeSrc.stop(); } catch(e){}
-  });
+    try { o1.stop(); o2.stop(); o3.stop(); strikeSrc.stop(); } catch(e){} }, [o1, o2, o3, g3, strikeSrc, strikeFilter, strikeGain, filter, noteGain]);
 
   o1.start(t);
   o2.start(t);
@@ -1100,7 +1106,7 @@ function playXylophone(freq, velocity=1) {
   g.gain.setValueAtTime(0.6 * velocity, t);
   g.gain.setValueAtTime(0.55 * velocity, t+0.08);
   g.gain.exponentialRampToValueAtTime(0.001, t+0.62);
-  const entry = claimVoice(() => { try { o1.stop(); o2.stop(); } catch(e){} });
+  const entry = claimVoice(() => { try { o1.stop(); o2.stop(); } catch(e){} }, [o1, o2, g]);
   o1.start(t);
   o1.stop(t+0.62);
   o2.start(t);
@@ -1423,7 +1429,13 @@ function drawFrame(handResults) {
 // ═══════════════════════════════════════════════
 // AR PIANO OVERLAY (CHROMATIC WHITE & BLACK KEYS)
 // ═══════════════════════════════════════════════
+let cachedPianoGeom = null;
+let cachedPianoW = 0, cachedPianoH = 0;
+
 function getARPianoGeometry(W, H) {
+  if (cachedPianoGeom && cachedPianoW === W && cachedPianoH === H) {
+    return cachedPianoGeom;
+  }
   const padX = W * 0.035;
   const keyboardW = W - padX * 2;
   const topY = H * 0.36; // Covers bottom ~60-64% of camera
@@ -1467,7 +1479,10 @@ function getARPianoGeometry(W, H) {
     };
   });
 
-  return { padX, topY, bottomY, keyboardW, keyboardH, whiteKeyW, blackKeyW, blackKeyH, whiteBoxes, blackBoxes };
+  cachedPianoW = W;
+  cachedPianoH = H;
+  cachedPianoGeom = { padX, topY, bottomY, keyboardW, keyboardH, whiteKeyW, blackKeyW, blackKeyH, whiteBoxes, blackBoxes };
+  return cachedPianoGeom;
 }
 
 function drawARPianoOverlay(ctx, W, H) {
@@ -1936,14 +1951,9 @@ function processHands(results) {
   hoveredKeys = {};
   hoveredDrums = {};
 
-  const handsData = [];
   lms.forEach((landmarks, i) => {
     const rawLabel = hdns[i] ? hdns[i].label : 'Right';
     const handLabel = rawLabel === 'Right' ? 'right' : 'left';
-    handsData.push({ landmarks, handLabel, score: hdns[i] ? hdns[i].score : 1 });
-  });
-
-  handsData.forEach(({ landmarks, handLabel }) => {
     handState[handLabel].missingSince = null;
     handState[handLabel].depth = landmarks[8].z;
 
