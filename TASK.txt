@@ -1,0 +1,21 @@
+// AIR-STUDIO TASK LIST - IMPROVEMENTS AND ADDITIONS
+
+/*
+ * [x] 1. Switch neon yellow to dark and light plum purple theme.
+ * [x] 2. Remove all emojis from buttons, icons, and logs.
+ * [x] 3. Clean Web Audio voice release with node disconnect.
+ * [x] 4. Cache AR piano geometry to avoid object allocation.
+ * [x] 5. Direct key index positioning using after property.
+ * [x] 6. Cross-browser toggle fullscreen with vendor fallback.
+ * [ ] 7. Add MIDI export to save recorded notes to .mid file.
+ * [ ] 8. Add beat looper to record 4-bar drum loops on repeat.
+ * [ ] 9. Add custom sound pack loader for custom WAV drum hits.
+ * [ ] 10. Add chord mode for piano to trigger chords with 1 finger.
+ * [ ] 11. Add pitch bend when moving hand left-to-right on keys.
+ * [ ] 12. Add low-light webcam boost using canvas brightness filter.
+ * [ ] 13. Add BPM tap tempo counter on drum screen.
+ * [ ] 14. Add audio reverb toggle for wet concert room sound.
+ *
+ * Goal: Keep code clean, fast, and easy to run in any browser.
+ */
+

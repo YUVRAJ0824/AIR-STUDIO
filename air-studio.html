@@ -3,14 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>AIR//STUDIO v3.3 PROFESSIONAL — ADVANCED MUSIC PRODUCTION</title>
+<title>AIR//STUDIO v3.3 PROFESSIONAL - ADVANCED MUSIC PRODUCTION</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 :root {
   --bg:     #080808;
   --fg:     #EFEFEF;
-  --acc:    #F5FF00;
+  --acc:        #A855F7;
+  --acc-light:  #C084FC;
+  --acc-dim:    #581C87;
+  --plum:       #9D4EDD;
+  --plum-dark:  #3C096C;
+  --plum-light: #E0AAFF;
   --red:    #FF2200;
   --blue:   #00AAFF;
   --green:  #00FF66;
@@ -28,11 +33,11 @@ body { width:100%; height:100vh; overflow:hidden; background:var(--bg); color:va
 #modal-layer { position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.97); display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
 #modal-layer.gone { display:none; }
 
-.modal { border:3px solid var(--fg); max-width:820px; width:94%; display:none; flex-direction:column; background:var(--bg); box-shadow:0 0 60px rgba(245,255,0,0.15); animation:modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); max-height:92vh; overflow-y:auto; }
+.modal { border:3px solid var(--fg); max-width:820px; width:94%; display:none; flex-direction:column; background:var(--bg); box-shadow:0 0 60px rgba(168,85,247,0.22); animation:modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); max-height:92vh; overflow-y:auto; }
 .modal.active { display:flex; }
 @keyframes modalIn { from { transform:scale(0.82) translateY(20px); opacity:0; } to { transform:scale(1) translateY(0); opacity:1; } }
 
-.modal-hdr { background:linear-gradient(90deg, var(--acc), #FFED4E); color:#000; font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:5px; padding:14px 24px; border-bottom:3px solid var(--acc); font-weight:700; }
+.modal-hdr { background:linear-gradient(90deg, var(--acc), var(--acc-light)); color:#000; font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:5px; padding:14px 24px; border-bottom:3px solid var(--acc); font-weight:700; }
 .modal-body { padding:36px 44px; display:flex; flex-direction:column; gap:28px; }
 .modal-title { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:5px; color:var(--acc); line-height:0.92; margin-bottom:10px; font-weight:700; }
 .modal-subtitle { font-size:10px; letter-spacing:3px; color:var(--dim); text-transform:uppercase; }
@@ -40,14 +45,14 @@ body { width:100%; height:100vh; overflow:hidden; background:var(--bg); color:va
 
 .inst-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; }
 .inst-card { padding:28px; border:3px solid var(--border); background:rgba(255,255,255,0.02); cursor:pointer; transition:all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); position:relative; overflow:hidden; }
-.inst-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(245,255,0,0.12) 0%, transparent 100%); opacity:0; transition:opacity 0.3s; }
-.inst-card:hover { border-color:var(--acc); transform:translateY(-6px); box-shadow:0 16px 48px rgba(245,255,0,0.2); }
+.inst-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(168,85,247,0.15) 0%, transparent 100%); opacity:0; transition:opacity 0.3s; }
+.inst-card:hover { border-color:var(--acc); transform:translateY(-6px); box-shadow:0 16px 48px rgba(168,85,247,0.25); }
 .inst-card:hover::before { opacity:1; }
-.inst-card.selected { background:linear-gradient(135deg, rgba(245,255,0,0.95), rgba(255,237,78,0.9)); color:#000; border-color:var(--acc); box-shadow:0 0 40px rgba(245,255,0,0.4); }
-.inst-card.selected .inst-icon { transform:scale(1.2) rotateZ(-5deg); filter:drop-shadow(0 0 12px #000); }
+.inst-card.selected { background:linear-gradient(135deg, rgba(168,85,247,0.95), rgba(192,132,252,0.9)); color:#000; border-color:var(--acc); box-shadow:0 0 40px rgba(168,85,247,0.45); }
+.inst-card.selected .inst-icon { transform:scale(1.1) rotateZ(-3deg); filter:drop-shadow(0 0 8px rgba(0,0,0,0.8)); color:#000; }
 .inst-card.selected .inst-name { color:#000; font-weight:700; }
 .inst-card.selected .inst-desc { color:rgba(0,0,0,0.65); }
-.inst-icon { font-size:56px; margin-bottom:14px; transition:all 0.3s; }
+.inst-icon { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:3px; color:var(--acc); margin-bottom:14px; transition:all 0.3s; font-weight:700; }
 .inst-name { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:3px; margin-bottom:10px; transition:color 0.3s; font-weight:700; }
 .inst-desc { font-size:9px; letter-spacing:2px; color:var(--dim); line-height:1.7; transition:color 0.3s; }
 
@@ -58,35 +63,94 @@ body { width:100%; height:100vh; overflow:hidden; background:var(--bg); color:va
 .switch input { opacity:0; width:0; height:0; }
 .slider-track { position:absolute; cursor:pointer; inset:0; background:var(--border); transition:0.25s; border:2px solid var(--dim); border-radius:14px; }
 .slider-track::before { content:''; position:absolute; width:18px; height:18px; left:3px; top:3px; background:var(--dim); transition:0.25s; border-radius:50%; }
-.switch input:checked + .slider-track { background:rgba(245,255,0,0.2); border-color:var(--acc); }
+.switch input:checked + .slider-track { background:rgba(168,85,247,0.25); border-color:var(--acc); }
 .switch input:checked + .slider-track::before { transform:translateX(22px); background:var(--acc); }
 
 .mbtn { padding:18px; border:none; background:var(--acc); color:#000; font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:4px; cursor:pointer; transition:all 0.2s; width:100%; font-weight:700; border-radius:2px; }
-.mbtn:hover:not(:disabled) { background:#FFED4E; transform:translateY(-3px); box-shadow:0 12px 32px rgba(245,255,0,0.4); }
+.mbtn:hover:not(:disabled) { background:var(--acc-light); transform:translateY(-3px); box-shadow:0 12px 32px rgba(168,85,247,0.45); }
 .mbtn:disabled { opacity:0.35; cursor:not-allowed; }
 
 .cal-screen { position:absolute; inset:0; z-index:50; background:rgba(0,0,0,0.88); display:none; flex-direction:column; align-items:center; justify-content:center; gap:24px; }
 .cal-screen.show { display:flex; }
-.cal-icon { font-size:72px; animation:spin 2.2s linear infinite; }
-@keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+.cal-icon { display:none; }
 .cal-text { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:3px; color:var(--acc); font-weight:700; }
 .cal-progress { width:240px; height:9px; background:var(--border); border-radius:5px; overflow:hidden; border:1px solid var(--acc); }
-.cal-bar { height:100%; background:linear-gradient(90deg, var(--blue), var(--acc), var(--green)); width:0%; transition:width 0.12s linear; }
+.cal-bar { height:100%; background:linear-gradient(90deg, var(--blue), var(--acc), var(--plum-light)); width:0%; transition:width 0.12s linear; }
 
 #pause-overlay { position:absolute; inset:0; z-index:60; background:rgba(0,0,0,0.6); backdrop-filter:blur(12px); display:none; align-items:center; justify-content:center; }
 #pause-overlay.show { display:flex; }
-.pause-text { font-family:'Bebas Neue',sans-serif; font-size:108px; letter-spacing:10px; color:rgba(245,255,0,0.92); text-shadow:0 0 40px rgba(245,255,0,0.6); animation:pausePulse 2.4s infinite; font-weight:700; }
+.pause-text { font-family:'Bebas Neue',sans-serif; font-size:108px; letter-spacing:10px; color:rgba(192,132,252,0.95); text-shadow:0 0 40px rgba(168,85,247,0.65); animation:pausePulse 2.4s infinite; font-weight:700; }
 @keyframes pausePulse { 0%,100%{ opacity:0.65; transform:scale(0.98); } 50%{ opacity:1; transform:scale(1.04); } }
 
-#app { display:grid; grid-template-rows:54px 1fr 54px; height:100vh; border:3px solid var(--fg); }
-#header { display:flex; align-items:stretch; border-bottom:3px solid var(--fg); background:linear-gradient(90deg, var(--fg), #f0f0f0); color:var(--bg); overflow:hidden; }
-.h-logo { font-family:'Bebas Neue',sans-serif; font-size:30px; letter-spacing:5px; background:linear-gradient(135deg, var(--acc), #FFED4E); color:#000; padding:0 26px; display:flex; align-items:center; border-right:3px solid #000; flex-shrink:0; font-weight:700; }
-.h-tag { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:rgba(0,0,0,0.52); padding:0 20px; display:flex; align-items:center; flex:1; font-weight:600; }
-.h-stats { display:flex; align-items:center; border-left:2px solid rgba(0,0,0,0.12); }
-.h-cell { display:flex; align-items:center; gap:9px; padding:0 18px; height:100%; border-right:1px solid rgba(0,0,0,0.1); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:rgba(0,0,0,0.6); font-weight:600; cursor:pointer; transition:all 0.2s; }
-.h-cell:hover { background:rgba(245,255,0,0.08); }
-.h-cell:last-child { border-right:none; }
-.h-cell.privacy-on { background:rgba(245,255,0,0.4); color:#000; }
+#app {
+  display: grid;
+  grid-template-rows: 54px 1fr 54px;
+  height: 100vh;
+  border: 2px solid var(--purple-dark);
+}
+#header {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 2px solid var(--purple-dark);
+  background: linear-gradient(90deg, #0e0717, #190c2a);
+  color: var(--fg);
+  overflow: hidden;
+}
+.h-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 30px;
+  letter-spacing: 5px;
+  background: linear-gradient(135deg, var(--purple-plum), var(--purple-bright));
+  color: #fff;
+  padding: 0 26px;
+  display: flex;
+  align-items: center;
+  border-right: 2px solid var(--purple-dark);
+  flex-shrink: 0;
+  font-weight: 700;
+  text-shadow: 0 0 14px rgba(192, 132, 252, 0.45);
+}
+.h-tag {
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--purple-soft);
+  opacity: 0.75;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  font-weight: 600;
+}
+.h-stats {
+  display: flex;
+  align-items: center;
+  border-left: 1px solid var(--purple-dark);
+}
+.h-cell {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 18px;
+  height: 100%;
+  border-right: 1px solid var(--purple-dark);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--dim);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.h-cell:hover {
+  background: rgba(123, 44, 191, 0.25);
+  color: var(--purple-light);
+}
+.h-cell:last-child { border-right: none; }
+.h-cell.privacy-on {
+  background: var(--purple-plum);
+  color: #fff;
+}
 
 .dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; transition:all 0.35s; }
 .dot.off { background:var(--red); opacity:0.25; box-shadow:none; }
@@ -96,12 +160,49 @@ body { width:100%; height:100vh; overflow:hidden; background:var(--bg); color:va
 @keyframes bdot { 0%,100%{box-shadow:0 0 8px var(--blue);} 50%{box-shadow:0 0 18px var(--blue);} }
 
 #body { display:grid; grid-template-columns:240px 1fr 260px; overflow:hidden; }
-#left { border-right:3px solid var(--border); background:var(--panel); display:flex; flex-direction:column; overflow:hidden; }
-.pt { font-size:8px; letter-spacing:4px; color:var(--dim); text-transform:uppercase; padding:11px 16px; border-bottom:1px solid var(--border); background:rgba(255,255,255,0.015); flex-shrink:0; font-weight:600; }
+#left {
+  border-right: 2px solid var(--purple-dark);
+  background: #09050e;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.pt {
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: var(--purple-soft);
+  opacity: 0.75;
+  text-transform: uppercase;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--purple-dark);
+  background: rgba(60, 9, 108, 0.15);
+  flex-shrink: 0;
+  font-weight: 600;
+}
 
-.ctrl-btns { padding:12px 14px; border-bottom:1px solid var(--border); display:flex; gap:8px; flex-wrap:wrap; }
-.ctrl-btn { flex:1; min-width:85px; padding:11px; border:none; background:var(--acc); color:#000; font-family:'Bebas Neue',sans-serif; font-size:10px; letter-spacing:2px; cursor:pointer; transition:all 0.18s; font-weight:700; border-radius:2px; }
-.ctrl-btn:hover { background:#FFED4E; transform:translateY(-2px); box-shadow:0 6px 16px rgba(245,255,0,0.35); }
+.ctrl-btns {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--purple-dark);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ctrl-btn {
+  flex: 1;
+  min-width: 85px;
+  padding: 11px;
+  border: none;
+  background: linear-gradient(90deg, var(--purple-plum), var(--purple-bright));
+  color: #fff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-weight: 700;
+  border-radius: 2px;
+}
+.ctrl-btn:hover { background:var(--acc-light); transform:translateY(-2px); box-shadow:0 6px 16px rgba(168,85,247,0.35); }
 .ctrl-btn.danger { background:var(--red); color:#fff; }
 .ctrl-btn.danger:hover { background:#FF4422; }
 .ctrl-btn.secondary { background:var(--blue); color:#fff; }
@@ -113,7 +214,7 @@ body { width:100%; height:100vh; overflow:hidden; background:var(--bg); color:va
 .vol-lbl { font-size:8px; letter-spacing:3px; color:var(--dim); text-transform:uppercase; font-weight:600; }
 .vol-num { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--acc); font-weight:700; }
 .vol-track { height:7px; background:var(--border); position:relative; margin-bottom:8px; border-radius:4px; overflow:hidden; }
-.vol-fill { position:absolute; left:0; top:0; bottom:0; background:linear-gradient(90deg, var(--blue), var(--acc), var(--green)); width:75%; transition:width 0.04s; border-radius:4px; }
+.vol-fill { position:absolute; left:0; top:0; bottom:0; background:linear-gradient(90deg, var(--blue), var(--acc), var(--plum-light)); width:75%; transition:width 0.04s; border-radius:4px; }
 input[type=range]#vr { width:100%; appearance:none; background:transparent; height:18px; outline:none; }
 input[type=range]#vr::-webkit-slider-thumb { appearance:none; width:15px; height:15px; background:var(--fg); border:2px solid var(--acc); margin-top:-5px; cursor:pointer; border-radius:50%; transition:all 0.18s; }
 input[type=range]#vr::-webkit-slider-thumb:hover { background:var(--acc); box-shadow:0 0 10px var(--acc); }
@@ -123,10 +224,10 @@ input[type=range]#vr::-webkit-slider-thumb:hover { background:var(--acc); box-sh
 .sens-lbl { font-size:8px; letter-spacing:3px; color:var(--dim); text-transform:uppercase; font-weight:600; }
 .sens-num { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:1px; color:var(--acc); font-weight:700; }
 .sens-meter { position:relative; height:8px; background:var(--border); border-radius:6px; overflow:hidden; border:1px solid rgba(0,170,255,0.35); margin-bottom:8px; }
-.sens-fill { position:absolute; left:0; top:0; bottom:0; width:35%; background:linear-gradient(90deg, var(--blue), var(--acc), var(--green)); border-radius:6px; }
+.sens-fill { position:absolute; left:0; top:0; bottom:0; width:35%; background:linear-gradient(90deg, var(--blue), var(--acc), var(--plum-light)); border-radius:6px; }
 input[type=range]#sens { width:100%; appearance:none; background:transparent; height:16px; outline:none; }
-input[type=range]#sens::-webkit-slider-thumb { appearance:none; width:14px; height:14px; background:var(--fg); border:2px solid var(--acc); cursor:pointer; border-radius:50%; transition:all 0.15s; box-shadow:0 0 12px rgba(245,255,0,0.35); }
-input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-shadow:0 0 12px rgba(245,255,0,0.7); }
+input[type=range]#sens::-webkit-slider-thumb { appearance:none; width:14px; height:14px; background:var(--fg); border:2px solid var(--acc); cursor:pointer; border-radius:50%; transition:all 0.15s; box-shadow:0 0 12px rgba(168,85,247,0.4); }
+input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-shadow:0 0 14px rgba(168,85,247,0.75); }
 
 #log { flex:1; overflow-y:auto; padding:10px 16px; display:flex; flex-direction:column; gap:4px; }
 #log::-webkit-scrollbar { width:4px; }
@@ -136,7 +237,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 .ll.sys { color:var(--green); opacity:0.95; font-weight:500; }
 .ll.err { color:var(--red); font-weight:600; }
 
-#stage { position:relative; background:linear-gradient(135deg, #050505 0%, #0d0d0d 100%); overflow:hidden; background-image:radial-gradient(circle at 20% 50%, rgba(0,170,255,0.10), transparent 52%), radial-gradient(circle at 80% 80%, rgba(245,255,0,0.07), transparent 52%); }
+#stage { position:relative; background:linear-gradient(135deg, #050505 0%, #0d0d0d 100%); overflow:hidden; background-image:radial-gradient(circle at 20% 50%, rgba(0,170,255,0.10), transparent 52%), radial-gradient(circle at 80% 80%, rgba(168,85,247,0.08), transparent 52%); }
 #webcam { display:none; }
 #draw-canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
 
@@ -147,14 +248,14 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 
 #mtag { position:absolute; top:16px; left:16px; z-index:20; display:flex; align-items:center; gap:11px; background:rgba(8,8,8,0.92); border:2px solid var(--border); padding:8px 16px; font-size:8px; letter-spacing:3px; text-transform:uppercase; color:var(--dim); transition:all 0.25s; pointer-events:none; border-radius:3px; }
 #mtag.detecting { color:var(--blue); border-color:rgba(0,170,255,0.7); box-shadow:0 0 16px rgba(0,170,255,0.15); }
-#mtag.hit { color:var(--acc); border-color:rgba(245,255,0,0.9); box-shadow:0 0 20px rgba(245,255,0,0.25); }
+#mtag.hit { color:var(--acc); border-color:rgba(168,85,247,0.9); box-shadow:0 0 20px rgba(168,85,247,0.3); }
 #mtag .mdot { width:9px; height:9px; border-radius:50%; background:var(--dim); flex-shrink:0; transition:all 0.25s; }
 
-#zlabel { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); z-index:20; font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:4px; color:rgba(245,255,0,0.92); background:rgba(8,8,8,0.94); padding:10px 24px; border:2px solid rgba(245,255,0,0.45); opacity:0; transition:opacity 0.15s; pointer-events:none; border-radius:3px; font-weight:700; }
+#zlabel { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); z-index:20; font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:4px; color:rgba(224,170,255,0.95); background:rgba(8,8,8,0.94); padding:10px 24px; border:2px solid rgba(168,85,247,0.5); opacity:0; transition:opacity 0.15s; pointer-events:none; border-radius:3px; font-weight:700; }
 #zlabel.show { opacity:1; }
 
-#inst-overlay { position:absolute; top:16px; right:16px; z-index:20; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:4px; color:rgba(245,255,0,0.65); background:rgba(8,8,8,0.94); padding:7px 16px; border:2px solid rgba(245,255,0,0.25); pointer-events:none; border-radius:3px; font-weight:700; }
-#info-pill { position:absolute; top:58px; right:16px; z-index:20; font-family:'Bebas Neue',sans-serif; font-size:9px; letter-spacing:2px; color:#000; background:var(--acc); padding:5px 10px; border-radius:999px; pointer-events:none; font-weight:700; box-shadow:0 0 18px rgba(245,255,0,0.32); }
+#inst-overlay { position:absolute; top:16px; right:16px; z-index:20; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:4px; color:rgba(224,170,255,0.85); background:rgba(8,8,8,0.94); padding:7px 16px; border:2px solid rgba(168,85,247,0.35); pointer-events:none; border-radius:3px; font-weight:700; }
+#info-pill { position:absolute; top:58px; right:16px; z-index:20; font-family:'Bebas Neue',sans-serif; font-size:9px; letter-spacing:2px; color:#000; background:var(--acc); padding:5px 10px; border-radius:999px; pointer-events:none; font-weight:700; box-shadow:0 0 18px rgba(168,85,247,0.4); }
 #info-pill.hidden { display:none; }
 
 #privacy-badge { position:absolute; top:96px; right:16px; z-index:20; font-family:'Bebas Neue',sans-serif; font-size:9px; letter-spacing:3px; color:#000; background:var(--acc); padding:6px 14px; pointer-events:none; border-radius:3px; font-weight:700; display:none; }
@@ -163,11 +264,11 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 #kb-hint { position:absolute; bottom:16px; left:16px; z-index:15; font-size:8px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; background:rgba(8,8,8,0.88); padding:6px 12px; border:1px solid var(--border); border-radius:2px; pointer-events:none; opacity:0; transition:opacity 0.3s; }
 #kb-hint.show { opacity:1; }
 
-#right { border-left:3px solid var(--border); background:var(--panel); display:flex; flex-direction:column; overflow-x:hidden; overflow-y:auto; }
+#right { border-left:2px solid var(--purple-dark); background:#09050e; display:flex; flex-direction:column; overflow-x:hidden; overflow-y:auto; }
 
 #inst-switch { padding:12px 14px; border-bottom:1px solid var(--border); display:flex; gap:6px; flex-wrap:wrap; flex-shrink:0; }
 .inst-btn { padding:8px 12px; border:1px solid var(--border); background:rgba(255,255,255,0.05); color:var(--dim); font-family:'Bebas Neue',sans-serif; font-size:9px; letter-spacing:2px; cursor:pointer; transition:all 0.15s; border-radius:2px; }
-.inst-btn:hover { background:rgba(245,255,0,0.1); color:var(--acc); border-color:var(--acc); }
+.inst-btn:hover { background:rgba(168,85,247,0.15); color:var(--acc); border-color:var(--acc); }
 .inst-btn.active { background:var(--acc); color:#000; border-color:var(--acc); }
 .inst-btn.secondary { background:rgba(0,170,255,0.12); color:var(--blue); border-color:rgba(0,170,255,0.6); }
 .inst-btn.secondary:hover { background:rgba(0,170,255,0.2); color:var(--blue); }
@@ -205,7 +306,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 .pad-label { position:absolute; left:2px; right:2px; bottom:3px; z-index:3; overflow:hidden; color:#FFFFFF; font-size:8px; font-weight:700; text-align:center; text-shadow:0 1px 3px #000; letter-spacing:1px; }
 
 .pad.lit { transform:scale(0.96); filter:brightness(1.4); }
-.pad.lit .drum-body { box-shadow:0 0 24px rgba(245,255,0,0.95); }
+.pad.lit .drum-body { box-shadow:0 0 24px rgba(168,85,247,0.95); }
 
 #pad-grid[data-layout="mini"] .drum-cluster { gap:6px; }
 #pad-grid[data-layout="mini"] .pad-label { font-size:7px; }
@@ -217,12 +318,12 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 .pk { position:relative; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding-bottom:10px; gap:2px; transition:all 0.08s; }
 .pk.white { background:linear-gradient(180deg, #f9f9f5, #dcdcd4); border:1px solid #999; border-radius:0 0 4px 4px; z-index:1; box-shadow:inset 0 -6px 12px -6px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.15); }
 .pk.white .pk-nm { color:#333; }
-.pk.white.lit { background:linear-gradient(180deg, var(--acc), #e8e850); box-shadow:0 0 14px rgba(245,255,0,0.6), 0 0 0 1px rgba(0,0,0,0.2); }
+.pk.white.lit { background:linear-gradient(180deg, var(--acc), var(--acc-light)); box-shadow:0 0 14px rgba(168,85,247,0.65), 0 0 0 1px rgba(0,0,0,0.2); }
 .pk.white.lit .pk-nm { color:#000; font-weight:700; }
 
 .pk.black { position:absolute; flex:none; width:7.5%; height:65%; top:0; background:linear-gradient(180deg, #353535, #0a0a0a); border:1px solid #000; border-radius:0 0 4px 4px; z-index:2; box-shadow:0 5px 10px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04); justify-content:flex-end; padding-bottom:7px; }
 .pk.black .pk-nm { color:#888; font-size:8px; }
-.pk.black.lit { background:linear-gradient(180deg, var(--acc), #d4d950); box-shadow:0 0 14px rgba(245,255,0,0.8), 0 0 0 1px rgba(0,0,0,0.2); }
+.pk.black.lit { background:linear-gradient(180deg, var(--acc), var(--plum-dark)); box-shadow:0 0 14px rgba(168,85,247,0.8), 0 0 0 1px rgba(0,0,0,0.2); }
 .pk.black.lit .pk-nm { color:#000; font-weight:700; }
 
 .pk.xylo { position:relative; flex:1; height:88px; border-radius:6px; display:flex; align-items:flex-end; justify-content:center; padding-bottom:10px; border:none; box-shadow:0 4px 0 rgba(0,0,0,0.4) inset; transition:all 0.1s; }
@@ -246,10 +347,10 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 
 #beat-wrap { flex:0 0 auto; padding:12px 14px; display:flex; flex-direction:column; justify-content:flex-end; gap:8px; }
 .bn { font-family:'Bebas Neue',sans-serif; font-size:68px; line-height:1; color:var(--fg); transition:all 0.1s; font-weight:700; }
-.bn.flash { color:var(--acc); filter:drop-shadow(0 0 8px var(--acc)); }
+.bn.flash { color:var(--acc); filter:drop-shadow(0 0 10px var(--acc)); }
 
-#footer { border-top:3px solid var(--border); display:grid; grid-template-columns:repeat(7,1fr); background:var(--panel); }
-.fc { padding:9px 13px; border-right:1px solid var(--border); display:flex; flex-direction:column; gap:3px; }
+#footer { border-top:2px solid var(--purple-dark); display:grid; grid-template-columns:repeat(7,1fr); background:#09050e; }
+.fc { padding:9px 13px; border-right:1px solid var(--purple-dark); display:flex; flex-direction:column; gap:3px; }
 .fc:last-child { border-right:none; }
 .fk { font-size:8px; letter-spacing:3px; color:var(--dim); text-transform:uppercase; font-weight:600; }
 .fv { font-size:12px; letter-spacing:1px; color:var(--fg); font-weight:700; }
@@ -259,7 +360,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 
 #flash { position:fixed; inset:0; z-index:999; background:var(--acc); opacity:0; pointer-events:none; transition:opacity 0.06s; }
 
-.ripple { position:absolute; border:2px solid #F5FF00; border-radius:50%; opacity:0.85; pointer-events:none; }
+.ripple { position:absolute; border:2px solid #C084FC; border-radius:50%; opacity:0.85; pointer-events:none; }
 
 .shortcut-hint { position:fixed; bottom:20px; right:20px; z-index:50; background:rgba(8,8,8,0.95); border:2px solid var(--border); padding:12px 16px; border-radius:3px; font-size:8px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; display:none; max-width:200px; }
 .shortcut-hint.show { display:block; animation:slideIn 0.3s ease; }
@@ -331,11 +432,11 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 <div id="kb-hint">Press ? for shortcuts</div>
 <div class="shortcut-hint" id="shortcut-hint">
   <div style="color:var(--acc);font-weight:700;margin-bottom:8px;">KEYBOARD SHORTCUTS</div>
-  <div>SPACE → Start/Stop</div>
-  <div>P → Pause/Resume</div>
-  <div>D / Shift+P / X → Switch Inst</div>
-  <div>F → Fullscreen</div>
-  <div>? → Hide hints</div>
+  <div>SPACE -> Start/Stop</div>
+  <div>P -> Pause/Resume</div>
+  <div>D / Shift+P / X -> Switch Inst</div>
+  <div>F -> Fullscreen</div>
+  <div>? -> Hide hints</div>
 </div>
 
 <div id="modal-layer">
@@ -349,17 +450,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
       <div class="modal-rule"></div>
       <div class="inst-grid">
         <div class="inst-card" onclick="selectInstrument('drums', this)">
-          <div class="inst-icon">🥁</div>
-          <div class="inst-name">ACOUSTIC DRUMS</div>
-          <div class="inst-desc">4 Professional Drums · Full Dynamics · Key: D</div>
-        </div>
-        <div class="inst-card" onclick="selectInstrument('piano', this)">
-          <div class="inst-icon">🎹</div>
-          <div class="inst-name">PIANO</div>
-          <div class="inst-desc">8 Keys · Rich Sustain · Key: P</div>
-        </div>
-        <div class="inst-card" onclick="selectInstrument('xylophone', this)">
-          <div class="inst-icon">🎵</div>
+          <div class="inst-icon">[XYLO]</div>
           <div class="inst-name">XYLOPHONE</div>
           <div class="inst-desc">7 Notes · Crisp Tone · Key: X</div>
         </div>
@@ -376,7 +467,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
         </label>
       </div>
       <div class="modal-rule"></div>
-      <button class="mbtn" id="select-btn" disabled onclick="confirmInstrument()">LAUNCH SYSTEM →</button>
+      <button class="mbtn" id="select-btn" disabled onclick="confirmInstrument()">LAUNCH SYSTEM -></button>
     </div>
   </div>
 
@@ -387,7 +478,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
         Your browser will request camera access. Click <span style="color:var(--acc);font-weight:700;">Allow</span> to activate dual hand tracking. This only happens once.
       </div>
       <div class="modal-rule"></div>
-      <button class="mbtn" id="perm-btn" onclick="doRequestCamera()">📷 GRANT CAMERA ACCESS</button>
+      <button class="mbtn" id="perm-btn" onclick="doRequestCamera()">GRANT CAMERA ACCESS</button>
     </div>
   </div>
 
@@ -414,7 +505,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
         MOTION <span id="lbl-motion">IDLE</span>
       </div>
       <div class="h-cell" id="header-privacy-cell" onclick="togglePrivacy()">
-        🔒 PRIVACY <span id="lbl-privacy">OFF</span>
+        PRIVACY <span id="lbl-privacy">OFF</span>
       </div>
     </div>
   </div>
@@ -424,9 +515,9 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
     <div id="left">
       <div class="pt">// CONTROLS</div>
       <div class="ctrl-btns">
-        <button id="startBtn" class="ctrl-btn" onclick="launchSystem()" style="display:none;">▶ START</button>
-        <button id="pauseBtn" class="ctrl-btn" onclick="togglePause()" style="display:none;">⏸ PAUSE</button>
-        <button id="stopBtn" class="ctrl-btn danger" onclick="stopSystem()" style="display:none;">⏹ STOP</button>
+        <button id="startBtn" class="ctrl-btn" onclick="launchSystem()" style="display:none;">START</button>
+        <button id="pauseBtn" class="ctrl-btn" onclick="togglePause()" style="display:none;">PAUSE</button>
+        <button id="stopBtn" class="ctrl-btn danger" onclick="stopSystem()" style="display:none;">STOP</button>
         <button id="exitBtn" class="ctrl-btn secondary" onclick="exitSystem()">EXIT</button>
       </div>
       <div class="pt">// VOLUME</div>
@@ -460,12 +551,11 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
         <div class="pause-text">PAUSED</div>
       </div>
       <div id="cam-placeholder">
-        <div style="font-size:64px; opacity:0.12;">📷</div>
+        <div style="font-size:28px; letter-spacing:4px; font-weight:700; color:var(--dim); font-family:'Bebas Neue',sans-serif;">[CAMERA READY]</div>
         <div style="font-size:11px; letter-spacing:4px; color:var(--dim); text-transform:uppercase;">Press SPACE or click START</div>
       </div>
       <div class="cal-screen" id="cal-screen">
-        <div class="cal-icon">⚙️</div>
-        <div class="cal-text">CALIBRATING</div>
+        <div class="cal-text">CALIBRATING SENSORS...</div>
         <div class="cal-progress">
           <div class="cal-bar" id="cal-bar"></div>
         </div>
@@ -476,7 +566,7 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
       </div>
       <div id="zlabel"></div>
       <div id="inst-overlay"></div>
-      <div id="privacy-badge">🔒 FACE BLURRED</div>
+      <div id="privacy-badge">FACE BLURRED</div>
     </div>
 
     <div id="right">
@@ -527,7 +617,10 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
 
 <script>'use strict';
 
-// INSTRUMENTS — 10-PIECE ACOUSTIC & CYBER DRUM KIT (MATCHING LAYOUT 2)
+// air studio - webcam motion music tool
+// 10 drums, piano and xylophone sounds
+
+// 1. DRUMS AND NOTES DATA
 const DRUM_KIT = [
   { id:'crash',      label:'CRASH',         type:'cymbal', cx:0.16, cy:0.33, r:0.115, color:'#c89346', ring:'#8d5120', key:'Q' },
   { id:'splash',     label:'SPLASH',        type:'cymbal', cx:0.50, cy:0.30, r:0.086, color:'#d89b4b', ring:'#9e4a1a', key:'W' },
@@ -543,43 +636,19 @@ const DRUM_KIT = [
 
 const PIANO = [
   { id:'C4', label:'C4', freq:261.63, color:'white' },
-  { id:'Cs4',label:'C♯4',freq:277.18, color:'black', after:0 },
+  { id:'Cs4',label:'C#4',freq:277.18, color:'black', after:0 },
   { id:'D4', label:'D4', freq:293.66, color:'white' },
-  { id:'Ds4',label:'D♯4',freq:311.13, color:'black', after:1 },
+  { id:'Ds4',label:'D#4',freq:311.13, color:'black', after:1 },
   { id:'E4', label:'E4', freq:329.63, color:'white' },
   { id:'F4', label:'F4', freq:349.23, color:'white' },
-  { id:'Fs4',label:'F♯4',freq:369.99, color:'black', after:3 },
+  { id:'Fs4',label:'F#4',freq:369.99, color:'black', after:3 },
   { id:'G4', label:'G4', freq:392.00, color:'white' },
-  { id:'Gs4',label:'G♯4',freq:415.30, color:'black', after:4 },
+  { id:'Gs4',label:'G#4',freq:415.30, color:'black', after:4 },
   { id:'A4', label:'A4', freq:440.00, color:'white' },
-  { id:'As4',label:'A♯4',freq:466.16, color:'black', after:5 },
+  { id:'As4',label:'A#4',freq:466.16, color:'black', after:5 },
   { id:'B4', label:'B4', freq:493.88, color:'white' },
   { id:'C5', label:'C5', freq:523.25, color:'white' },
 ];
-
-const PIANO_EXTENDED = [
-  { id:'C4', label:'C4', freq:261.63, color:'white' },
-  { id:'Cs4',label:'C♯4',freq:277.18, color:'black', after:0 },
-  { id:'D4', label:'D4', freq:293.66, color:'white' },
-  { id:'Ds4',label:'D♯4',freq:311.13, color:'black', after:1 },
-  { id:'E4', label:'E4', freq:329.63, color:'white' },
-  { id:'F4', label:'F4', freq:349.23, color:'white' },
-  { id:'Fs4',label:'F♯4',freq:369.99, color:'black', after:3 },
-  { id:'G4', label:'G4', freq:392.00, color:'white' },
-  { id:'Gs4',label:'G♯4',freq:415.30, color:'black', after:4 },
-  { id:'A4', label:'A4', freq:440.00, color:'white' },
-  { id:'As4',label:'A♯4',freq:466.16, color:'black', after:5 },
-  { id:'B4', label:'B4', freq:493.88, color:'white' },
-  { id:'C5', label:'C5', freq:523.25, color:'white' },
-  { id:'Cs5',label:'C♯5',freq:554.37, color:'black', after:7 },
-  { id:'D5', label:'D5', freq:587.33, color:'white' },
-  { id:'Ds5',label:'D♯5',freq:622.25, color:'black', after:8 },
-  { id:'E5', label:'E5', freq:659.25, color:'white' },
-  { id:'F5', label:'F5', freq:698.46, color:'white' },
-  { id:'Fs5',label:'F♯5',freq:739.99, color:'black', after:10 },
-  { id:'G5', label:'G5', freq:783.99, color:'white' },
-];
-const PIANO_WHITES = PIANO.filter(k => k.color === 'white');
 
 const XYLOPHONE = [
   { id:'C5', label:'C5', freq:523.25 },
@@ -590,22 +659,10 @@ const XYLOPHONE = [
   { id:'A5', label:'A5', freq:880.00 },
   { id:'B5', label:'B5', freq:987.77 },
 ];
-const XYLOPHONE_EXTENDED = [
-  { id:'C5', label:'C5', freq:523.25 },
-  { id:'D5', label:'D5', freq:587.33 },
-  { id:'E5', label:'E5', freq:659.25 },
-  { id:'F5', label:'F5', freq:698.46 },
-  { id:'G5', label:'G5', freq:783.99 },
-  { id:'A5', label:'A5', freq:880.00 },
-  { id:'B5', label:'B5', freq:987.77 },
-  { id:'C6', label:'C6', freq:1046.50 },
-  { id:'D6', label:'D6', freq:1174.66 },
-  { id:'E6', label:'E6', freq:1318.51 },
-];
 
+// 2. STATE AND CACHE VARS
 let selectedInst = null;
 let privacyMode = false;
-let extendedKeys = false;
 let layoutMode = 'standard';
 let audioCtx, masterGain, analyser, compressor;
 let handsInstance;
@@ -688,9 +745,7 @@ const CALIBRATION_DURATION = 2200;
 let permissionGranted = false;
 let lastFrameTime = 0;
 
-// ═══════════════════════════════════════════════
-// AUDIO ENGINE
-// ═══════════════════════════════════════════════
+// 3. AUDIO SETUP AND SOUNDS
 function initAudio() {
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   masterGain = audioCtx.createGain();
@@ -728,35 +783,30 @@ function noiseBuf(dur) {
   return buf;
 }
 
-function claimVoice(stopFn, nodes=[]) {
+function claimVoice(stopFn) {
   if (activeVoices >= MAX_VOICES) {
     const oldest = voiceQueue.shift();
     if (oldest) {
       try { oldest.stopFn(); } catch(e) {}
-      if (oldest.nodes) {
-        oldest.nodes.forEach(n => { try { n.disconnect(); } catch(e) {} });
-      }
       activeVoices--;
     }
   }
   activeVoices++;
-  const entry = { stopFn, nodes };
+  const entry = { stopFn };
   voiceQueue.push(entry);
   return entry;
 }
 
 function releaseVoice(entry) {
-  if (entry && entry.nodes) {
-    entry.nodes.forEach(n => { try { n.disconnect(); } catch(e) {} });
-  }
   activeVoices = Math.max(0, activeVoices - 1);
   const idx = voiceQueue.indexOf(entry);
   if (idx !== -1) voiceQueue.splice(idx, 1);
-  const voiceEl = document.getElementById('f-voices');
-  if (voiceEl) voiceEl.textContent = String(activeVoices).padStart(2, '0');
+  document.getElementById('f-voices').textContent = String(activeVoices).padStart(2, '0');
 }
 
 // DRUM & PIANO PROFESSIONAL AUDIO SYNTHESIS
+// kick sound: deep pitch drop with tap
+// kick drum sound - deep drop with click tap
 function playKick(velocity=1) {
   if (!audioCtx) return;
   const t = audioCtx.currentTime;
@@ -789,6 +839,8 @@ function playKick(velocity=1) {
   o.onended = () => releaseVoice(entry);
 }
 
+// snare sound: tone body with noise snare wires
+// snare drum sound - tone body and noise wires
 function playSnare(velocity=1) {
   if (!audioCtx) return;
   const t = audioCtx.currentTime;
@@ -829,6 +881,8 @@ function playSnare(velocity=1) {
   src.onended = () => releaseVoice(entry);
 }
 
+// tom sound: pitch depends on tom type
+// tom drum sound - pitch depends on high, mid, floor
 function playTom(velocity=1, pitch='high') {
   if (!audioCtx) return;
   const t = audioCtx.currentTime;
@@ -853,6 +907,8 @@ function playTom(velocity=1, pitch='high') {
   o.onended = () => releaseVoice(entry);
 }
 
+// hihat sound: metallic square waves and white noise
+// hihat sound - square oscs and noise burst
 function playHiHat(velocity=1, isOpen=false) {
   if (!audioCtx) return;
   const t = audioCtx.currentTime;
@@ -890,13 +946,15 @@ function playHiHat(velocity=1, isOpen=false) {
 
   const entry = claimVoice(() => {
     try { oscs.forEach(o => o.stop()); stick.stop(); } catch(e){}
-  }, [...oscs, hpf, g, stick, stickFilter]);
+  });
   oscs.forEach(o => { o.start(t); o.stop(t + dur); });
   stick.start(t);
   stick.stop(t + dur);
   stick.onended = () => releaseVoice(entry);
 }
 
+// crash sound: long noise wash
+// crash cymbal sound - long noise wash
 function playCrash(velocity=1) {
   if (!audioCtx) return;
   const t = audioCtx.currentTime;
@@ -928,7 +986,7 @@ function playCrash(velocity=1) {
 
   const entry = claimVoice(() => {
     try { noise.stop(); o1.stop(); o2.stop(); } catch(e){}
-  }, [noise, hpf, g, o1, o2]);
+  });
   noise.start(t);
   o1.start(t);
   o2.start(t);
@@ -938,6 +996,7 @@ function playCrash(velocity=1) {
   noise.onended = () => releaseVoice(entry);
 }
 
+// splash cymbal sound - fast short wash
 function playSplash(velocity=1) {
   if (!audioCtx) return;
   const t = audioCtx.currentTime;
@@ -963,6 +1022,7 @@ function playSplash(velocity=1) {
   noise.onended = () => releaseVoice(entry);
 }
 
+// ride cymbal sound - bell ping and body wash
 function playRide(velocity=1) {
   if (!audioCtx) return;
   const t = audioCtx.currentTime;
@@ -994,7 +1054,7 @@ function playRide(velocity=1) {
 
   const entry = claimVoice(() => {
     try { ping.stop(); noise.stop(); } catch(e){}
-  }, [ping, pingG, noise, hpf, bodyG]);
+  });
   ping.start(t);
   noise.start(t);
   ping.stop(t + 0.38);
@@ -1016,6 +1076,8 @@ function playDrumSound(drumId, velocity=1) {
 }
 
 // RICH ACOUSTIC / ELECTRIC PIANO SYNTHESIS
+// piano note sound with hammer filter
+// piano note - triangle and chorus sine with hammer filter
 function playNote(freq, dur=0.85, velocity=1) {
   if (!audioCtx) return;
   const t = audioCtx.currentTime;
@@ -1077,7 +1139,8 @@ function playNote(freq, dur=0.85, velocity=1) {
   o2.connect(filter);
 
   const entry = claimVoice(() => {
-    try { o1.stop(); o2.stop(); o3.stop(); strikeSrc.stop(); } catch(e){} }, [o1, o2, o3, g3, strikeSrc, strikeFilter, strikeGain, filter, noteGain]);
+    try { o1.stop(); o2.stop(); o3.stop(); strikeSrc.stop(); } catch(e){}
+  });
 
   o1.start(t);
   o2.start(t);
@@ -1091,6 +1154,8 @@ function playNote(freq, dur=0.85, velocity=1) {
   o1.onended = () => releaseVoice(entry);
 }
 
+// xylo sound: clean bells
+// xylo note - clean sine bells
 function playXylophone(freq, velocity=1) {
   if (!audioCtx) return;
   const t = audioCtx.currentTime;
@@ -1114,9 +1179,7 @@ function playXylophone(freq, velocity=1) {
   o1.onended = () => releaseVoice(entry);
 }
 
-// ═══════════════════════════════════════════════
-// UI & CONTROLS
-// ═══════════════════════════════════════════════
+// 4. UI CONTROLS AND BUTTONS
 function selectInstrument(name, btn) {
   selectedInst = name;
   document.querySelectorAll('.inst-card').forEach(b => b.classList.remove('selected'));
@@ -1142,21 +1205,13 @@ function switchInstrument(inst) {
   buildUI();
   setInstrumentBackground();
   updateSwitchButtons();
-  addLog(`[SWITCH] → ${inst.toUpperCase()}`, 'sys');
+  addLog(`[SWITCH] -> ${inst.toUpperCase()}`, 'sys');
 }
 
 function updateSwitchButtons() {
   document.querySelectorAll('.inst-btn[data-inst]').forEach(b => {
     b.classList.toggle('active', b.dataset.inst === currentInst);
   });
-}
-
-function getPianoSet() {
-  return PIANO;
-}
-
-function getXylophoneSet() {
-  return XYLOPHONE;
 }
 
 function toggleLayoutMode() {
@@ -1178,7 +1233,7 @@ function buildUI() {
 
   if (currentInst === 'drums') {
     document.getElementById('right-title').textContent = '// 10-PIECE ULTRA DRUM KIT';
-    document.getElementById('inst-overlay').textContent = '🥁 DRUMS ULTRA';
+    document.getElementById('inst-overlay').textContent = 'DRUMS ULTRA';
     document.getElementById('f-inst').textContent = 'DRUMS';
     const drumGrid = document.getElementById('pad-grid');
     drumGrid.classList.remove('gone');
@@ -1188,7 +1243,7 @@ function buildUI() {
     buildDrumPads();
   } else if (currentInst === 'piano') {
     document.getElementById('right-title').textContent = '// CHROMATIC PIANO';
-    document.getElementById('inst-overlay').textContent = '🎹 PIANO';
+    document.getElementById('inst-overlay').textContent = 'PIANO';
     document.getElementById('f-inst').textContent = 'PIANO';
     document.getElementById('pad-grid').classList.add('gone');
     document.getElementById('piano-keys').classList.remove('gone');
@@ -1196,7 +1251,7 @@ function buildUI() {
     buildPianoKeys();
   } else if (currentInst === 'xylophone') {
     document.getElementById('right-title').textContent = '// XYLOPHONE';
-    document.getElementById('inst-overlay').textContent = '🎵 XYLOPHONE';
+    document.getElementById('inst-overlay').textContent = 'XYLOPHONE';
     document.getElementById('f-inst').textContent = 'XYLOPHONE';
     document.getElementById('pad-grid').classList.add('gone');
     document.getElementById('piano-keys').classList.remove('gone');
@@ -1205,6 +1260,7 @@ function buildUI() {
   }
 }
 
+// build drum pads on right side
 function buildDrumPads() {
   const grid = document.getElementById('pad-grid');
   grid.innerHTML = '';
@@ -1217,7 +1273,7 @@ function buildDrumPads() {
     d.className = 'pad ' + (p.type === 'cymbal' ? 'cymbal-pad' : 'drum-pad');
     d.id = 'pad-' + p.id;
     d.onclick = () => triggerDrumHit(p.id, 1);
-    const icon = p.type === 'cymbal' ? '🟡' : '🥁';
+    const icon = p.type === 'cymbal' ? 'CYM' : 'DRUM';
     d.innerHTML = `
       <div class="drum-body" style="border-color:${p.ring}"></div>
       <div class="drum-rim" style="border-color:${p.color}"></div>
@@ -1248,17 +1304,18 @@ function triggerDrumHit(drumId, velocity=1, x=null, y=null) {
     y: rippleY,
     radius: 12,
     maxRadius: drum.r * Math.min(canvas.width, canvas.height) * 1.35,
-    color: drum.type === 'cymbal' ? '#F5FF00' : '#00E5FF',
+    color: drum.type === 'cymbal' ? '#C084FC' : '#00E5FF',
     alpha: 1.0
   });
 
   onHit(drum.label, drum.id, velocity);
 }
 
+// build piano white and black keys
 function buildPianoKeys() {
   document.getElementById('piano-keys').classList.remove('xylo-mode');
   document.getElementById('piano-keys').innerHTML = '';
-  const keys = getPianoSet();
+  const keys = PIANO;
   const whites = keys.filter(k => k.color === 'white');
   whites.forEach(k => {
     const d = document.createElement('div');
@@ -1279,10 +1336,11 @@ function buildPianoKeys() {
   });
 }
 
+// build xylo keys
 function buildXylophoneKeys() {
   document.getElementById('piano-keys').classList.add('xylo-mode');
   document.getElementById('piano-keys').innerHTML = '';
-  const keys = getXylophoneSet();
+  const keys = XYLOPHONE;
   keys.forEach((k, i) => {
     const d = document.createElement('div');
     d.className = `pk xylo xylo-${i % 7}`;
@@ -1342,7 +1400,7 @@ function resizeCanvas() {
 }
 window.addEventListener('resize', resizeCanvas);
 
-const batchUpdate = { handCount: null, motionState: null, coordsR: null, coordsL: null, fps: null };
+const batchUpdate = { handCount: null, motionState: null, fps: null };
 
 function flushBatchUpdate() {
   const b = batchUpdate;
@@ -1426,16 +1484,8 @@ function drawFrame(handResults) {
   }
 }
 
-// ═══════════════════════════════════════════════
-// AR PIANO OVERLAY (CHROMATIC WHITE & BLACK KEYS)
-// ═══════════════════════════════════════════════
-let cachedPianoGeom = null;
-let cachedPianoW = 0, cachedPianoH = 0;
-
+// 5. PIANO OVERLAY DRAW
 function getARPianoGeometry(W, H) {
-  if (cachedPianoGeom && cachedPianoW === W && cachedPianoH === H) {
-    return cachedPianoGeom;
-  }
   const padX = W * 0.035;
   const keyboardW = W - padX * 2;
   const topY = H * 0.36; // Covers bottom ~60-64% of camera
@@ -1479,10 +1529,7 @@ function getARPianoGeometry(W, H) {
     };
   });
 
-  cachedPianoW = W;
-  cachedPianoH = H;
-  cachedPianoGeom = { padX, topY, bottomY, keyboardW, keyboardH, whiteKeyW, blackKeyW, blackKeyH, whiteBoxes, blackBoxes };
-  return cachedPianoGeom;
+  return { padX, topY, bottomY, keyboardW, keyboardH, whiteKeyW, blackKeyW, blackKeyH, whiteBoxes, blackBoxes };
 }
 
 function drawARPianoOverlay(ctx, W, H) {
@@ -1511,8 +1558,8 @@ function drawARPianoOverlay(ctx, W, H) {
 
     let fillGrad = ctx.createLinearGradient(k.x, k.y, k.x, k.y2);
     if (isLit) {
-      fillGrad.addColorStop(0, 'rgba(255, 245, 120, 0.95)');
-      fillGrad.addColorStop(1, 'rgba(245, 210, 0, 0.85)');
+      fillGrad.addColorStop(0, 'rgba(233, 213, 255, 0.95)');
+      fillGrad.addColorStop(1, 'rgba(168, 85, 247, 0.85)');
     } else if (hoverVal > 0) {
       fillGrad.addColorStop(0, `rgba(0, 229, 255, ${0.28 + hoverVal * 0.35})`);
       fillGrad.addColorStop(1, `rgba(0, 160, 255, ${0.18 + hoverVal * 0.25})`);
@@ -1541,8 +1588,8 @@ function drawARPianoOverlay(ctx, W, H) {
 
     let fillGrad = ctx.createLinearGradient(k.x, k.y, k.x, k.y2);
     if (isLit) {
-      fillGrad.addColorStop(0, 'rgba(255, 180, 0, 0.98)');
-      fillGrad.addColorStop(1, 'rgba(245, 255, 0, 0.90)');
+      fillGrad.addColorStop(0, 'rgba(192, 132, 252, 0.98)');
+      fillGrad.addColorStop(1, 'rgba(147, 51, 234, 0.90)');
     } else if (hoverVal > 0) {
       fillGrad.addColorStop(0, `rgba(0, 180, 255, ${0.7 + hoverVal * 0.25})`);
       fillGrad.addColorStop(1, `rgba(0, 100, 200, ${0.85 + hoverVal * 0.15})`);
@@ -1566,9 +1613,7 @@ function drawARPianoOverlay(ctx, W, H) {
   ctx.restore();
 }
 
-// ═══════════════════════════════════════════════
-// AR 10-PIECE DRUM KIT OVERLAY (MATCHING ULTRA LAYOUT 2)
-// ═══════════════════════════════════════════════
+// 6. DRUMS OVERLAY DRAW
 function drawARDrumsOverlay(ctx, W, H) {
   const now = performance.now();
   const minDim = Math.min(W, H);
@@ -1709,9 +1754,7 @@ function drawARDrumsOverlay(ctx, W, H) {
   ctx.restore();
 }
 
-// ═══════════════════════════════════════════════
-// AR XYLOPHONE OVERLAY
-// ═══════════════════════════════════════════════
+// 7. XYLOPHONE OVERLAY DRAW
 function drawARXylophoneOverlay(ctx, W, H) {
   const padX = W * 0.04;
   const keyboardW = W - padX * 2;
@@ -1746,9 +1789,7 @@ function drawARXylophoneOverlay(ctx, W, H) {
   ctx.restore();
 }
 
-// ═══════════════════════════════════════════════
-// AR SHOCKWAVE RIPPLES
-// ═══════════════════════════════════════════════
+// 8. HIT RIPPLES DRAW
 function drawARRipples(ctx) {
   for (let i = arHitRipples.length - 1; i >= 0; i--) {
     const r = arHitRipples[i];
@@ -1769,14 +1810,12 @@ function drawARRipples(ctx) {
   }
 }
 
-// ═══════════════════════════════════════════════
-// FUTURISTIC CYBER SKELETON GLOVE HAND TRACKING
-// ═══════════════════════════════════════════════
+// 9. HAND SKELETON GLOVE DRAW
 function drawHand(ctx, lms, label, W, H) {
   const isR = label === 'Right';
   const glow = isR ? glowR : glowL;
-  const rgb = isR ? '245, 255, 0' : '0, 229, 255';
-  const hex = isR ? '#F5FF00' : '#00E5FF';
+  const rgb = isR ? '192, 132, 252' : '0, 229, 255';
+  const hex = isR ? '#C084FC' : '#00E5FF';
 
   const pts = lms.map(lm => ({
     x: (1 - lm.x) * W,
@@ -1921,9 +1960,7 @@ function showZone(name) {
   setTimeout(() => lbl.classList.remove('show'), 380);
 }
 
-// ═══════════════════════════════════════════════
-// TRUE POLYPHONIC PARALLEL MULTI-FINGER TRACKING
-// ═══════════════════════════════════════════════
+// 10. MULTI FINGER HIT DETECTION
 function processHands(results) {
   if (!running || isCalibrating) return;
   const lms = results.multiHandLandmarks || [];
@@ -1951,9 +1988,14 @@ function processHands(results) {
   hoveredKeys = {};
   hoveredDrums = {};
 
+  const handsData = [];
   lms.forEach((landmarks, i) => {
     const rawLabel = hdns[i] ? hdns[i].label : 'Right';
     const handLabel = rawLabel === 'Right' ? 'right' : 'left';
+    handsData.push({ landmarks, handLabel, score: hdns[i] ? hdns[i].score : 1 });
+  });
+
+  handsData.forEach(({ landmarks, handLabel }) => {
     handState[handLabel].missingSince = null;
     handState[handLabel].depth = landmarks[8].z;
 
@@ -2025,7 +2067,7 @@ function firePianoKey(key, velocity, handLabel, x, y) {
     x, y,
     radius: 12,
     maxRadius: 65,
-    color: key.color === 'white' ? '#00E5FF' : '#F5FF00',
+    color: key.color === 'white' ? '#00E5FF' : '#C084FC',
     alpha: 1.0
   });
 
@@ -2162,7 +2204,7 @@ function drawWaveform() {
   ctx.fillRect(0, 0, W, H);
 
   if (!analyser) {
-    ctx.strokeStyle = 'rgba(245,255,0,0.08)';
+    ctx.strokeStyle = 'rgba(192, 132, 252, 0.12)';
     ctx.lineWidth = 1.2;
     ctx.beginPath();
     ctx.moveTo(0, H/2);
@@ -2175,7 +2217,7 @@ function drawWaveform() {
     waveformData = new Uint8Array(analyser.frequencyBinCount);
   }
   analyser.getByteTimeDomainData(waveformData);
-  ctx.strokeStyle = '#F5FF00';
+  ctx.strokeStyle = '#C084FC';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   waveformData.forEach((v, i) => {
@@ -2212,7 +2254,7 @@ function startCalibration() {
       calibrationTimer = null;
       document.getElementById('cal-screen').classList.remove('show');
       isCalibrating = false;
-      addLog('[SYS] READY ✓', 'sys');
+      addLog('[SYS] READY', 'sys');
     }
   }, 100);
 }
@@ -2235,12 +2277,12 @@ function setControlState(state) {
   } else if (state === 'running') {
     document.getElementById('startBtn').style.display = 'none';
     document.getElementById('pauseBtn').style.display = 'inline-block';
-    document.getElementById('pauseBtn').textContent = '⏸ PAUSE';
+    document.getElementById('pauseBtn').textContent = 'PAUSE';
     document.getElementById('stopBtn').style.display = 'inline-block';
   } else if (state === 'paused') {
     document.getElementById('startBtn').style.display = 'none';
     document.getElementById('pauseBtn').style.display = 'inline-block';
-    document.getElementById('pauseBtn').textContent = '▶ RESUME';
+    document.getElementById('pauseBtn').textContent = 'RESUME';
     document.getElementById('stopBtn').style.display = 'inline-block';
   }
 }
@@ -2325,7 +2367,7 @@ document.addEventListener('click', () => {
   }
 }, { once: false });
 
-// KEYBOARD SHORTCUTS
+// 11. SHORTCUTS AND KEYS
 document.addEventListener('keydown', (e) => {
   if (e.code === 'Space') {
     e.preventDefault();
@@ -2435,7 +2477,7 @@ async function doRequestCamera() {
 
     permissionGranted = true;
     button.textContent = 'LAUNCHING...';
-    addLog('[SYS] CAMERA AUTHORIZED ✓', 'sys');
+    addLog('[SYS] CAMERA AUTHORIZED', 'sys');
     await launchSystem();
   } catch(err) {
     if (sharedStream) sharedStream.getTracks().forEach(track => track.stop());
@@ -2444,7 +2486,7 @@ async function doRequestCamera() {
     video.srcObject = null;
     permissionGranted = false;
     button.disabled = false;
-    button.textContent = '📷 RETRY';
+    button.textContent = 'RETRY';
     addLog('[ERR] ' + err.name, 'err');
   } finally {
     cameraRequestPending = false;
@@ -2550,7 +2592,7 @@ async function launchSystem() {
   } catch(err) {
     stopSystem();
     document.getElementById('perm-btn').disabled = false;
-    document.getElementById('perm-btn').textContent = '📷 RETRY';
+    document.getElementById('perm-btn').textContent = 'RETRY';
     addLog('[ERR] ' + err.message, 'err');
   } finally {
     systemStarting = false;
