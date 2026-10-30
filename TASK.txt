@@ -1,7 +1,23 @@
-// AIR-STUDIO TASK LIST - ROADMAP
+// AIR-STUDIO TASK LIST - ROADMAP & CHAT RECOVERY LOG
 
 /*
- * DAILY PROGRESS (TODAY - 3% TO 5% DONE):
+ * ============================================================================
+ * WORKFLOW & CHAT CRASH RECOVERY INSTRUCTIONS:
+ * 1. Experimental work / heavy test code is done on "air-studio-exp.html" (git-ignored).
+ * 2. Daily updates are slowly moved 3% to 5% per day into the main "air-studio.html".
+ * 3. Daily git push to branch EXP with short, informal, casual commit messages
+ *    (e.g., "recap this tmrw", "fix this bug bro", "added drum stuff macha").
+ * 4. IF CHAT CRASHES OR NEW CHAT STARTS:
+ *    Always read this TASK.txt first and run "git log -3 --oneline" to see exact
+ *    status, then pick up the next 3-5% task without re-asking questions.
+ * ============================================================================
+ *
+ * LATEST GIT PUSH STATUS:
+ * - Branch: EXP (remote: origin/EXP)
+ * - Last Pushed Commit: 2307bfc ("polish: purple neon, compact layout, tune ar piano trigger & docs")
+ * - Next commits style: short informal messages per user request.
+ *
+ * DAILY PROGRESS (TODAY - 3% TO 5% DONE & PUSHED):
  * [x] 1. Sleek rectangular start popup menu (660px) with clean proportions.
  * [x] 2. Reduced music item icons from 56px to 32px for clean card layout.
  * [x] 3. Changed neon yellow accent to light purple neon (#C084FC / #E0AAFF).
@@ -27,12 +43,13 @@
  * FUTURE ROADMAP:
  * [ ] 5. 4-level gesture sensitivity options (Very Low, Mid-Low, Mid-High, Auto).
  * [ ] 6. Finger trigger mode options (single index finger vs multi-finger trigger).
- * [ ] 7. MIDI note recording & export.
- * [ ] 8. 4-bar beat looper.
- * [ ] 9. Custom sound pack loader.
- * [ ] 10. 1-finger chord mode.
- * [ ] 11. Pitch bend gesture.
- * [ ] 12. Low-light webcam boost filter.
+ * [ ] 7. Native Java DSP audio backend & virtual MIDI routing to DAWs.
+ * [ ] 8. MIDI note recording & export.
+ * [ ] 9. 4-bar beat looper.
+ * [ ] 10. Custom sound pack loader.
+ * [ ] 11. 1-finger chord mode.
+ * [ ] 12. Pitch bend gesture.
+ * [ ] 13. Low-light webcam boost filter.
  *
  * Goal: Keep code clean, fast, and easy to run in any browser.
  */
