@@ -25,22 +25,20 @@ A browser-based motion musical workstation featuring a 10-piece drum kit, chroma
 - **10-Piece Drum Kit**: Full acoustic/cyber layout with 5 cymbals (Crash, Splash, Ride, Closed Hat, Open Hat) and 5 drums (Snare, High Tom, Mid Tom, Floor Tom, Bass/Kick) with velocity sensing.
 - **Chromatic Piano**: Standard 13-key and extended 20-key layout anchored at bottom 50% stage with multi-finger polyphonic strike detection.
 - **Xylophone**: 7 to 10-bar melodic percussion with wood/metal resonance.
-- **Controls & Privacy**: 3-step sensitivity buttons (Light, Normal, Firm), face-blur privacy toggle, and live oscilloscope.
+- **Controls & Privacy**: 4-level sensitivity presets (Very Low, Low, Mid, High), face-blur privacy toggle, and live oscilloscope.
 
 ---
 
-## WORKFLOW & REPOSITORY STRUCTURE
+## REPOSITORY STRUCTURE
 
-- **`ORG/air-studio.html`**: Production-ready, stable codebase updated in measured daily increments (~4% per session).
-- **`EXP/air-studio-exp.html`**: Experimental sandbox for testing heavy features, complex audio DSP, or layout experiments (git-ignored).
-- **`TASK.txt`**: Active daily progress log and roadmap tracker.
+- **`ORG/air-studio.html`**: Production-ready, stable browser application. Zero build tools or npm dependencies required—runs directly in any modern browser.
 
 ---
 
 ## FUTURE ROADMAP & JAVA EXPANSION
 
 - Native Java DSP backend engine and virtual MIDI output for DAWs (Ableton, FL Studio).
-- 808 Synth Bass, 4-bar looper, custom WAV sound pack loader, and 4-tier gesture sensitivity.
+- 808 Synth Bass, 4-bar looper, custom WAV sound pack loader, and 1-finger chord mode.
 
 ---
 
