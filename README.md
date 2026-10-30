@@ -1,6 +1,6 @@
-# AIR//STUDIO
+# AIR//STUDIO — Hand Gesture Music Instrument Playing
 
-Webcam motion instrument studio in the browser. Translates real-time hand tracking into live procedural drum, piano, and percussion hits with zero external hardware or build tools.
+Real-time webcam hand gesture music instrument player featuring a 10-piece drum kit, chromatic piano, and xylophone. Play instruments in mid-air using fingertip motion tracking with zero external hardware or build tools.
 
 *Personal experimental project for learning, creative demo testing, and motion-audio research.*
 
@@ -17,8 +17,8 @@ Webcam motion instrument studio in the browser. Translates real-time hand tracki
 
 ## FEATURES & INSTRUMENTS
 
-- **10-Piece Drum Kit**: Cymbals (Crash, Splash, Ride, Hats) and Drums (Snare, Toms, Kick) with velocity sensing.
-- **Chromatic Piano**: Standard 13-key and extended 20-key layout anchored at bottom 50% stage with multi-finger polyphony.
+- **10-Piece Drum Kit**: Full acoustic/cyber layout with 5 cymbals (Crash, Splash, Ride, Closed Hat, Open Hat) and 5 drums (Snare, High Tom, Mid Tom, Floor Tom, Bass/Kick) with velocity sensing.
+- **Chromatic Piano**: Standard 13-key and extended 20-key layout anchored at bottom 50% stage with multi-finger polyphonic strike detection.
 - **Xylophone**: 7 to 10-bar melodic percussion with wood/metal resonance.
 - **Controls & Privacy**: 3-step sensitivity buttons (Light, Normal, Firm), face-blur privacy toggle, and live oscilloscope.
 
