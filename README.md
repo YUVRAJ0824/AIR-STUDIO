@@ -1,6 +1,11 @@
-# AIR//STUDIO — Hand Gesture Music Instrument Playing
+# AIR//STUDIO
 
-Real-time webcam hand gesture music instrument player featuring a 10-piece drum kit, chromatic piano, and xylophone. Play instruments in mid-air using fingertip motion tracking with zero external hardware or build tools.
+**Real-Time Hand Gesture Musical Workstation Using Computer Vision and Web Audio Technology**  
+*Author: Yuvraj V*
+
+---
+
+A browser-based motion musical workstation featuring a 10-piece drum kit, chromatic piano, and xylophone. Play instruments in mid-air using webcam hand tracking and procedural sound synthesis with zero external hardware or build tools.
 
 *Personal experimental project for learning, creative demo testing, and motion-audio research.*
 
