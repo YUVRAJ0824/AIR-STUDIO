@@ -1,0 +1,17 @@
+# Editor & OS files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+.idea/
+.vscode/
+
+# Node / scripts
+node_modules/
+test_*.js
+check_*.js
+apply_*.js
+
+# Local experimental playground (so heavy tests don't pollute git)
+air-studio-exp.html
+

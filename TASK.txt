@@ -1,21 +1,38 @@
-// AIR-STUDIO TASK LIST - IMPROVEMENTS AND ADDITIONS
+// AIR-STUDIO TASK LIST - ROADMAP
 
 /*
- * [x] 1. Switch neon yellow to dark and light plum purple theme.
- * [x] 2. Remove all emojis from buttons, icons, and logs.
- * [x] 3. Clean Web Audio voice release with node disconnect.
- * [x] 4. Cache AR piano geometry to avoid object allocation.
- * [x] 5. Direct key index positioning using after property.
- * [x] 6. Cross-browser toggle fullscreen with vendor fallback.
- * [ ] 7. Add MIDI export to save recorded notes to .mid file.
- * [ ] 8. Add beat looper to record 4-bar drum loops on repeat.
- * [ ] 9. Add custom sound pack loader for custom WAV drum hits.
- * [ ] 10. Add chord mode for piano to trigger chords with 1 finger.
- * [ ] 11. Add pitch bend when moving hand left-to-right on keys.
- * [ ] 12. Add low-light webcam boost using canvas brightness filter.
- * [ ] 13. Add BPM tap tempo counter on drum screen.
- * [ ] 14. Add audio reverb toggle for wet concert room sound.
+ * DAILY PROGRESS (TODAY - 3% TO 5% DONE):
+ * [x] 1. Sleek rectangular start popup menu (660px) with clean proportions.
+ * [x] 2. Reduced music item icons from 56px to 32px for clean card layout.
+ * [x] 3. Changed neon yellow accent to light purple neon (#C084FC / #E0AAFF).
+ * [x] 4. Made 10-piece drum pad layout compact (aspect-ratio 1.8, 6px gap) to eliminate excessive height.
+ * [x] 5. Replaced finicky drag sensitivity slider with clean option buttons (LIGHT / NORMAL / FIRM).
+ * [x] 6. Tuned trigger threshold (from 0.035 to 0.052) so tapping is not hyper-sensitive.
+ * [x] 7. Softened skeleton lines and palm mesh opacity to eliminate blinding glare on video.
+ * [x] 8. Reduced footer bar height (from 54px to 38px) to give more playing space.
+ * [x] 9. Smoothed modal & card hover animations for a clean feel.
+ * [x] 10. Lowered AR piano coverage from 70-80% down to bottom ~50% of the screen.
+ * [x] 11. Tuned piano strike velocity threshold to prevent over-sensitive accidental triggers.
+ * [x] 12. Removed all emojis from UI, code, and logs in favor of clean cyber badges/text.
+ * [x] 13. Compacted data arrays (piano, xylo, multiFingerState) and cleaned up file bloat.
+ * [x] 14. Rewrote README.md with tech stack breakdown and Java backend roadmap.
+ * [x] 15. Added .gitignore and created air-studio-exp.html for heavy testing.
+ *
+ * TOMORROW'S 3-5% PLAN:
+ * [ ] 1. Mobile & tablet responsive check and play area adjustments.
+ * [ ] 2. Layout toggle polish (standard vs mini mode).
+ * [ ] 3. Sound tuning pass on drum and piano hits.
+ * [ ] 4. Interactive dual-hand strike testing.
+ *
+ * FUTURE ROADMAP:
+ * [ ] 5. 4-level gesture sensitivity options (Very Low, Mid-Low, Mid-High, Auto).
+ * [ ] 6. Finger trigger mode options (single index finger vs multi-finger trigger).
+ * [ ] 7. MIDI note recording & export.
+ * [ ] 8. 4-bar beat looper.
+ * [ ] 9. Custom sound pack loader.
+ * [ ] 10. 1-finger chord mode.
+ * [ ] 11. Pitch bend gesture.
+ * [ ] 12. Low-light webcam boost filter.
  *
  * Goal: Keep code clean, fast, and easy to run in any browser.
  */
-
