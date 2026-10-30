@@ -112,8 +112,8 @@ body { width:100%; height:100vh; overflow:hidden; background:var(--bg); color:va
 #left { border-right:3px solid var(--border); background:var(--panel); display:flex; flex-direction:column; overflow:hidden; }
 .pt { font-size:8px; letter-spacing:4px; color:var(--dim); text-transform:uppercase; padding:11px 16px; border-bottom:1px solid var(--border); background:rgba(255,255,255,0.015); flex-shrink:0; font-weight:600; }
 
-.ctrl-btns { padding:12px 14px; border-bottom:1px solid var(--border); display:flex; gap:8px; flex-wrap:wrap; }
-.ctrl-btn { flex:1; min-width:85px; padding:11px; border:none; background:var(--acc); color:#000; font-family:'Bebas Neue',sans-serif; font-size:10px; letter-spacing:2px; cursor:pointer; transition:all 0.18s; font-weight:700; border-radius:2px; }
+.ctrl-btns { padding:8px 10px; border-bottom:1px solid var(--border); display:flex; gap:6px; flex-wrap:wrap; }
+.ctrl-btn { flex:1; min-width:65px; padding:6px 8px; border:none; background:var(--acc); color:#000; font-family:'Bebas Neue',sans-serif; font-size:9.5px; letter-spacing:1.5px; cursor:pointer; transition:all 0.15s; font-weight:700; border-radius:2px; text-align:center; }
 .ctrl-btn:hover { background:#E0AAFF; transform:translateY(-2px); box-shadow:0 6px 16px rgba(192,132,252,0.35); }
 .ctrl-btn.danger { background:var(--red); color:#fff; }
 .ctrl-btn.danger:hover { background:#FF4422; }
@@ -132,7 +132,7 @@ input[type=range]#vr::-webkit-slider-thumb { appearance:none; width:15px; height
 input[type=range]#vr::-webkit-slider-thumb:hover { background:var(--acc); box-shadow:0 0 10px var(--acc); }
 
 .sens-wrap { padding:10px 14px; border-bottom:1px solid var(--border); flex-shrink:0; }
-.sens-presets { display:flex; gap:5px; margin-bottom:8px; }
+.sens-presets { display:grid; grid-template-columns:repeat(2, 1fr); gap:4px; margin-bottom:8px; }
 .sens-btn { flex:1; padding:6px 3px; border:1px solid var(--border); background:rgba(255,255,255,0.03); color:var(--dim); font-family:'Bebas Neue',sans-serif; font-size:10px; letter-spacing:1px; cursor:pointer; border-radius:2px; transition:all 0.15s; }
 .sens-btn:hover { border-color:var(--acc); color:var(--acc); }
 .sens-btn.active { background:var(--acc); color:#000; border-color:var(--acc); font-weight:700; }
@@ -440,38 +440,37 @@ input[type=range]#sens::-webkit-slider-thumb:hover { background:var(--acc); box-
   <div id="body">
 
     <div id="left">
-      <div class="pt">// CONTROLS</div>
+      <div class="pt" style="color:#FFFFFF; font-weight:700;">CONTROLS</div>
       <div class="ctrl-btns">
         <button id="startBtn" class="ctrl-btn" onclick="launchSystem()" style="display:none;">▶ START</button>
         <button id="pauseBtn" class="ctrl-btn" onclick="togglePause()" style="display:none;">⏸ PAUSE</button>
         <button id="stopBtn" class="ctrl-btn danger" onclick="stopSystem()" style="display:none;">⏹ STOP</button>
         <button id="exitBtn" class="ctrl-btn secondary" onclick="exitSystem()">EXIT</button>
       </div>
-      <div class="pt">// VOLUME</div>
+      <div class="pt" style="color:#FFFFFF; font-weight:700;">KEY LOGS</div>
+      <div id="log">
+        <div class="ll sys">[KEY LOGS READY]</div>
+      </div>
       <div class="vol-wrap">
         <div class="vol-row">
-          <div class="vol-lbl">MASTER</div>
+          <div class="vol-lbl" style="color:#FFFFFF; font-weight:700;">MASTER (VOL)</div>
           <div class="vol-num" id="vol-num">75</div>
         </div>
         <div class="vol-track"><div class="vol-fill" id="vol-fill"></div></div>
         <input type="range" id="vr" min="0" max="100" value="75" oninput="setVol(this.value)">
       </div>
-      <div class="pt">// SENSITIVITY</div>
       <div class="sens-wrap">
         <div class="sens-row">
-          <span class="sens-lbl">Trigger Threshold</span>
-          <span class="sens-num" id="sens-num">52</span>
+          <span class="sens-lbl" style="color:#FFFFFF; font-weight:700;">THRESHOLD (SENSI)</span>
+          <span class="sens-num" id="sens-num">58</span>
         </div>
         <div class="sens-presets">
-          <button type="button" class="sens-btn" onclick="setSensitivity(0.040, this)">LIGHT</button>
-          <button type="button" class="sens-btn active" onclick="setSensitivity(0.052, this)">NORMAL</button>
-          <button type="button" class="sens-btn" onclick="setSensitivity(0.072, this)">FIRM</button>
+          <button type="button" class="sens-btn" onclick="setSensitivity(0.038, this)">VERY LOW</button>
+          <button type="button" class="sens-btn" onclick="setSensitivity(0.048, this)">LOW</button>
+          <button type="button" class="sens-btn active" onclick="setSensitivity(0.058, this)">MID</button>
+          <button type="button" class="sens-btn" onclick="setSensitivity(0.075, this)">HIGH</button>
         </div>
         <div class="sens-meter"><div class="sens-fill" id="sens-fill"></div></div>
-      </div>
-      <div class="pt">// SYSTEM LOG</div>
-      <div id="log">
-        <div class="ll sys">[SYS] v3.3 PROFESSIONAL READY</div>
       </div>
     </div>
 
@@ -627,7 +626,7 @@ let lastWaveformAt = 0;
 let waveformData = null;
 let totalHits = 0;
 let masterVol = 0.75;
-let gestureThreshold = 0.052;
+let gestureThreshold = 0.058;
 let running = false;
 let paused = false;
 let glowR = 0, glowL = 0;

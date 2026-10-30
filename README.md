@@ -29,15 +29,21 @@ A browser-based motion musical workstation featuring a 10-piece drum kit, chroma
 
 ---
 
-## WORKFLOW & ROADMAP
+## WORKFLOW & REPOSITORY STRUCTURE
 
-- **Pacing**: Heavy testing is built in `air-studio-exp.html` (git-ignored); stable code lands in `air-studio.html` via daily 3-5% commits. See `TASK.txt` for live status.
-- **Future Plans**:
-  - Native Java DSP backend engine and virtual MIDI output for DAWs (Ableton, FL Studio).
-  - 808 Synth Bass, 4-bar looper, custom WAV sound pack loader, and 4-tier gesture sensitivity.
+- **`ORG/air-studio.html`**: Production-ready, stable codebase updated in measured daily increments (~4% per session).
+- **`EXP/air-studio-exp.html`**: Experimental sandbox for testing heavy features, complex audio DSP, or layout experiments (git-ignored).
+- **`TASK.txt`**: Active daily progress log and roadmap tracker.
+
+---
+
+## FUTURE ROADMAP & JAVA EXPANSION
+
+- Native Java DSP backend engine and virtual MIDI output for DAWs (Ableton, FL Studio).
+- 808 Synth Bass, 4-bar looper, custom WAV sound pack loader, and 4-tier gesture sensitivity.
 
 ---
 
 ## QUICK START
 
-Open `air-studio.html` in any browser, click **Launch System**, allow webcam access, and play.
+Open `ORG/air-studio.html` in any browser, click **Launch System**, allow webcam access, and play.

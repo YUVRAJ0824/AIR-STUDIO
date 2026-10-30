@@ -6,12 +6,18 @@ Thumbs.db
 .idea/
 .vscode/
 
-# Node / scripts
+# Node / scratch scripts
 node_modules/
 test_*.js
 check_*.js
 apply_*.js
+verify_*.js
 
-# Local experimental playground (so heavy tests don't pollute git)
+# Local sandbox (never pushed to git)
 air-studio-exp.html
+EXP/
 
+# Local agent & workflow tracking files (never pushed to git)
+GIT_PUSH_INFO.md
+AGENTS.md
+TASK.txt
