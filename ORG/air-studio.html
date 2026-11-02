@@ -641,6 +641,8 @@ let cpuUsagePct = 18;
 const FINGER_LANDMARKS = [4, 8, 12, 16, 20]; // Thumb, Index, Middle, Ring, Pinky
 const mkFingerMap = () => Object.fromEntries(FINGER_LANDMARKS.map(id => [id, { prevY:null, velocity:0, armed:true, targetId:null, lastHit:0 }]));
 const multiFingerState = { right: mkFingerMap(), left: mkFingerMap() };
+let lastPianoHitHand = { left: 0, right: 0 };
+let lastPianoHitKey = { left: null, right: null };
 
 const handState = {
   right: { prevY: null, armed: true, zone: -1, missingSince: null, velocity: 0, depth: 0, confidence: 0 },
@@ -1499,9 +1501,10 @@ function drawARPianoOverlay(ctx, W, H) {
     ctx.strokeRect(k.x + 1.5, k.y, k.w - 3, k.h);
 
     ctx.fillStyle = isLit ? '#000000' : '#EFEFEF';
-    ctx.font = '700 12px "IBM Plex Mono", monospace';
+    ctx.font = isLit ? '700 16px "Bebas Neue", sans-serif' : '700 14px "Bebas Neue", sans-serif';
+    ctx.letterSpacing = '1px';
     ctx.textAlign = 'center';
-    ctx.fillText(k.label, k.x + k.w / 2, k.y2 - 14);
+    ctx.fillText(k.label, k.x + k.w / 2, geom.bottomY - 24);
   });
 
   // 2. Draw Black Keys (Elevated on top)
@@ -1528,10 +1531,11 @@ function drawARPianoOverlay(ctx, W, H) {
     ctx.lineWidth = isLit ? 2 : 1.2;
     ctx.strokeRect(k.x, k.y, k.w, k.h);
 
-    ctx.fillStyle = isLit ? '#000000' : 'rgba(255, 255, 255, 0.88)';
-    ctx.font = '700 9px "IBM Plex Mono", monospace';
+    ctx.fillStyle = isLit ? '#000000' : 'rgba(255, 255, 255, 0.95)';
+    ctx.font = isLit ? '700 14px "Bebas Neue", sans-serif' : '700 12px "Bebas Neue", sans-serif';
+    ctx.letterSpacing = '1px';
     ctx.textAlign = 'center';
-    ctx.fillText(k.label, k.x + k.w / 2, k.y2 - 10);
+    ctx.fillText(k.label, k.x + k.w / 2, k.y2 - 16);
   });
   ctx.restore();
 }
@@ -1945,7 +1949,7 @@ function processHands(results) {
 function processPianoMultiFinger(landmarks, handLabel, W, H, now) {
   const geom = getARPianoGeometry(W, H);
   const fStateMap = multiFingerState[handLabel];
-  const velThreshold = Math.max(3.8, gestureThreshold * H * 0.14);
+  const velThreshold = Math.max(4.2, gestureThreshold * H * 0.16);
 
   FINGER_LANDMARKS.forEach(fIdx => {
     const lm = landmarks[fIdx];
@@ -1957,32 +1961,33 @@ function processPianoMultiFinger(landmarks, handLabel, W, H, now) {
     fSt.velocity = Math.max(0, deltaY);
     const isDownward = deltaY > velThreshold;
 
-    // Check Key Hover (Black keys checked first for priority)
-    let targetedKey = geom.blackBoxes.find(b => tipX >= b.x1 && tipX <= b.x2 && tipY >= b.y1 && tipY <= b.y2);
+    // Check Key Hover with 2px inner safety inset so hand tilt does not hit neighbor keys
+    let targetedKey = geom.blackBoxes.find(b => tipX >= (b.x1 + 1.5) && tipX <= (b.x2 - 1.5) && tipY >= b.y1 && tipY <= b.y2);
     if (!targetedKey) {
-      targetedKey = geom.whiteBoxes.find(w => tipX >= w.x1 && tipX <= w.x2 && tipY >= w.y1 && tipY <= w.y2);
+      targetedKey = geom.whiteBoxes.find(w => tipX >= (w.x1 + 2) && tipX <= (w.x2 - 2) && tipY >= w.y1 && tipY <= w.y2);
     }
 
     // Hover guidance aura
     if (targetedKey) {
       hoveredKeys[targetedKey.id] = Math.max(hoveredKeys[targetedKey.id] || 0, 0.85);
-    } else if (tipY >= geom.topY - H * 0.12 && tipY <= geom.topY) {
-      // Just above keybed
+    } else if (tipY >= geom.topY - H * 0.08 && tipY <= geom.topY) {
       const nearWhite = geom.whiteBoxes.find(w => tipX >= w.x1 && tipX <= w.x2);
       if (nearWhite) hoveredKeys[nearWhite.id] = Math.max(hoveredKeys[nearWhite.id] || 0, 0.35);
     }
 
-    // Polyphonic Strike Detection
-    if (targetedKey && isDownward && tipY >= geom.topY + 12) {
-      if (fSt.armed && canFire(`pk_${targetedKey.id}_${handLabel}_${fIdx}`)) {
-        firePianoKey(targetedKey, fSt.velocity / 12, handLabel, tipX, tipY);
+    // Polyphonic Strike Detection:
+    // Requires explicit downward strike while armed. Eliminates neighbor key misfires when hand tilts.
+    if (targetedKey && isDownward && tipY >= (geom.topY + 8) && fSt.armed) {
+      const isNeighborSameHand = (now - lastPianoHitHand[handLabel] < 38) && (lastPianoHitKey[handLabel] !== targetedKey.id);
+      if (!isNeighborSameHand && canFire(`pk_${targetedKey.id}_${handLabel}`)) {
+        firePianoKey(targetedKey, fSt.velocity / 11, handLabel, tipX, tipY);
         fSt.armed = false;
         fSt.targetId = targetedKey.id;
-      } else if (fSt.targetId !== targetedKey.id && canFire(`pk_${targetedKey.id}_${handLabel}_${fIdx}`)) {
-        firePianoKey(targetedKey, fSt.velocity / 12, handLabel, tipX, tipY);
-        fSt.targetId = targetedKey.id;
+        lastPianoHitHand[handLabel] = now;
+        lastPianoHitKey[handLabel] = targetedKey.id;
       }
-    } else if (!isDownward || deltaY < -2 || tipY < geom.topY - 8) {
+    } else if (deltaY < -1.8 || tipY < geom.topY - 4) {
+      // Re-arm when finger lifts up from the keybed
       fSt.armed = true;
       fSt.targetId = null;
     }
